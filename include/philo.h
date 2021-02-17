@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/17 18:06:15 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/17 19:42:37 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct      s_data
 *** Philo_one
 */
 
-t_data *get_struct(void);
 int philo_one(t_data *values);
 
 /*
@@ -47,7 +46,7 @@ int philo_one(t_data *values);
 int	ft_atoi(const char *str);
 int only_digit(char *str);
 int error_arg(int argc, char **argv);
-t_data *get_struct(void);
+t_data **get_struct(void);
 int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
 int complete_values(t_data *values);
