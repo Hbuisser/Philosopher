@@ -1,25 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/01/31 14:39:00 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:57:34 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void init_struct(t_data *values)
+int init_struct(t_data *values)
 {
+	int i;
+
+	i = 0;
     values->nbr_of_philo = 0;
 	values->time_to_die = 0;
 	values->time_to_eat = 0;
 	values->time_to_sleep = 0;
     values->nbr_of_time_each_philo_must_eat = 0;
-    values->fork = 0;
+	if (!(values->philo = malloc(sizeof(pthread_t *))))
+		return (1);
+	if (!(values->mutex = malloc(sizeof(pthread_mutex_t *))))
+		return (1);
+	if (!(values->fork = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	if (!(values->name = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	while (i < values->nbr_of_philo)
+	{
+		values->fork[i] = 1;
+		values->name[i] = i;
+		i++;
+	}
+	return (0);
 }
 
 int	ft_atoi(const char *str)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvan-eyn <mvan-eyn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2020/12/14 10:47:15 by mvan-eyn         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:49:02 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_atoi(const char *str);
 int only_digit(char *str);
 int error_arg(int argc, char **argv);
 t_data *get_struct(void);
-void init_struct(t_data *values);
+int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
 
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_one.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/01/31 14:39:00 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/17 17:10:56 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,49 @@
 // 	return(1);
 // }
 
-int create_thread(t_data *values)
+void *routine(void *arg)
 {
-	
+	t_data *values;
+
+	values = get_struct();
+	//(void)arg;
+	printf("hello in routine%d\n", values->nbr_of_philo);
+	//i = *(int *)arg;
+	return (arg);
+}
+
+int create_join(t_data *values, int i)
+{
+	char *status;
+
+	status = NULL;
+	pthread_join(*values->philo[i], (void *)&status);
+	printf("hello in join%d\n", values->nbr_of_philo);
+	return (0);
+}
+
+int create_thread(t_data *values, int i)
+{
+	printf("hello%d\n", values->nbr_of_philo);
+	values->philo[i] = malloc(sizeof(pthread_t));
+	//values->mutex[i] = malloc(sizeof(pthread_mutex_t));
+	//pthread_mutex_init(values->mutex[i], NULL);
+	pthread_create(values->philo[i] , NULL, &routine, NULL);
 	return (0);
 }
 
 int philo_in_action(t_data *values)
 {
 	//printf("hello%d\n", values->nbr_of_philo);
-	create_thread(values);
+	int i;
+
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		create_thread(values, i);
+		create_join(values, i);
+		i++;
+	}
 	return (0);
 }
 
@@ -109,7 +142,8 @@ int main(int argc, char **argv)
 
 	i = 1;
 	values = get_struct();
-	init_struct(values);
+	if (init_struct(values))
+		return (0);
 	if (error_arg(argc, argv))
 		return (0);
 	if (parse_values(values, argc, argv))
@@ -118,3 +152,12 @@ int main(int argc, char **argv)
 	philo_in_action(values);
 	return (0);
 }
+
+
+
+// gettimeofday (&temps_avant, NULL);
+//pthread_create(values->philo[i], NULL, &routine, &values->name[i]);
+// gettimeofday (&temps_apres, NULL);
+// printf("temps en us: %ld us\n", 
+// 	(((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000
+// 	+ temps_apres.tv_usec) - temps_avant.tv_usec) * 1000);
