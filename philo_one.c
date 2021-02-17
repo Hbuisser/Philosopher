@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/17 17:10:56 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:49:52 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@
 // {
 // 	int i;
 // 	char *status;
-// 	// struct timeval temps_avant;
-// 	// struct timeval temps_apres;
 
 // 	i = 0;
 // 	status = NULL;
@@ -65,19 +63,12 @@
 // 		i++;
 // 	}
 // 	i = 0;
-// 	printf("fork: %d\n", values->fork[0]);
 // 	while (i < values->nbr_of_philo)
 // 	{
 // 		values->philo[i] = malloc(sizeof(pthread_t));
 // 		values->mutex[i] = malloc(sizeof(pthread_mutex_t));
-// 		printf("i before: %d\n", i);
 // 		pthread_mutex_init(values->mutex[i], NULL);
-// 		// gettimeofday (&temps_avant, NULL);
 // 		pthread_create(values->philo[i], NULL, &routine, &values->name[i]);
-//     	// gettimeofday (&temps_apres, NULL);
-//     	// printf("temps en us: %ld us\n", 
-// 		// 	(((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000
-// 		// 	+ temps_apres.tv_usec) - temps_avant.tv_usec) * 1000);
 // 		i++;
 // 	}
 // 	i = 0;
@@ -89,14 +80,43 @@
 // 	return(1);
 // }
 
+int eating(t_data *values, int i)
+{
+	printf("Le philo %d est en train de manger\n", values->philo_num[i]);
+	// values->fork[i] = 0;
+	// values->fork[i + 1] = 0;
+	return (0);
+}
+
 void *routine(void *arg)
 {
 	t_data *values;
+	int i;
 
 	values = get_struct();
-	//(void)arg;
-	printf("hello in routine%d\n", values->nbr_of_philo);
-	//i = *(int *)arg;
+	i = *(int *)arg;
+	//if (values->fork[i] == 1 && values->fork[i + 1] == 1)
+	//{
+	pthread_mutex_init(values->mutex[i], NULL);
+	if (values->mutex[i + 1])
+		pthread_mutex_init(values->mutex[i + 1], NULL);
+		
+	pthread_mutex_lock(values->mutex[i]);
+	if (values->mutex[i + 1])
+		pthread_mutex_lock(values->mutex[i + 1]);
+
+	eating(values, i);
+
+	pthread_mutex_unlock(values->mutex[i]);
+	if (values->mutex[i + 1])
+		pthread_mutex_unlock(values->mutex[i + 1]);
+
+	pthread_mutex_destroy(values->mutex[i]);
+	if (values->mutex[i + 1])
+		pthread_mutex_destroy(values->mutex[i + 1]);
+	//}
+	values->fork[i] = 1;
+	values->fork[i + 1] = 1;
 	return (arg);
 }
 
@@ -106,28 +126,27 @@ int create_join(t_data *values, int i)
 
 	status = NULL;
 	pthread_join(*values->philo[i], (void *)&status);
-	printf("hello in join%d\n", values->nbr_of_philo);
 	return (0);
 }
 
 int create_thread(t_data *values, int i)
 {
-	printf("hello%d\n", values->nbr_of_philo);
 	values->philo[i] = malloc(sizeof(pthread_t));
-	//values->mutex[i] = malloc(sizeof(pthread_mutex_t));
-	//pthread_mutex_init(values->mutex[i], NULL);
-	pthread_create(values->philo[i] , NULL, &routine, NULL);
+	pthread_create(values->philo[i] , NULL, &routine, &i);
 	return (0);
 }
 
 int philo_in_action(t_data *values)
 {
-	//printf("hello%d\n", values->nbr_of_philo);
 	int i;
 
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
+		values->mutex[i] = malloc(sizeof(pthread_mutex_t));
+		if (values->mutex[i + 1])
+			values->mutex[i + 1] = malloc(sizeof(pthread_mutex_t));
+		// pthread_mutex_init(values->mutex[i], NULL);
 		create_thread(values, i);
 		create_join(values, i);
 		i++;
@@ -140,7 +159,7 @@ int main(int argc, char **argv)
 	t_data *values;
 	int i;
 
-	i = 1;
+	i = 0;
 	values = get_struct();
 	if (init_struct(values))
 		return (0);
@@ -148,12 +167,16 @@ int main(int argc, char **argv)
 		return (0);
 	if (parse_values(values, argc, argv))
 		return (0);
+	if (complete_values(values))
+		return (0);
 	//philo_one(values);
 	philo_in_action(values);
 	return (0);
 }
 
 
+// 	// struct timeval temps_avant;
+// 	// struct timeval temps_apres;
 
 // gettimeofday (&temps_avant, NULL);
 //pthread_create(values->philo[i], NULL, &routine, &values->name[i]);

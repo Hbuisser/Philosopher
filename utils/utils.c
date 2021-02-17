@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/17 16:57:34 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:05:51 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,6 @@ int init_struct(t_data *values)
 		return (1);
 	if (!(values->mutex = malloc(sizeof(pthread_mutex_t *))))
 		return (1);
-	if (!(values->fork = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
-		return (1);
-	if (!(values->name = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
-		return (1);
-	while (i < values->nbr_of_philo)
-	{
-		values->fork[i] = 1;
-		values->name[i] = i;
-		i++;
-	}
 	return (0);
 }
 
@@ -135,5 +125,23 @@ int parse_values(t_data *values, int argc, char **argv)
 		values->nbr_of_time_each_philo_must_eat = ft_atoi(argv[5]);
 	else
 		values->nbr_of_time_each_philo_must_eat = 1;
+	return (0);
+}
+
+int complete_values(t_data *values)
+{
+	int i;
+
+	i = 0;
+	if (!(values->fork = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	if (!(values->philo_num = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	while (i < values->nbr_of_philo)
+	{
+		values->fork[i] = 1;
+		values->philo_num[i] = i;
+		i++;
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/17 16:49:02 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:06:15 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,12 @@ typedef struct      s_data
     pthread_t **philo;
     pthread_mutex_t **mutex;
     int *fork;
-    int *name;
+    int *philo_num;
 }                   t_data;
+
+/*
+*** Philo_one
+*/
 
 t_data *get_struct(void);
 int philo_one(t_data *values);
@@ -46,5 +50,6 @@ int error_arg(int argc, char **argv);
 t_data *get_struct(void);
 int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
+int complete_values(t_data *values);
 
 #endif
