@@ -6,7 +6,7 @@
 #    By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/25 20:05:16 by hbuisser          #+#    #+#              #
-#    Updated: 2021/02/18 13:16:08 by hbuisser         ###   ########.fr        #
+#    Updated: 2021/02/18 16:04:52 by hbuisser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ OBJS = $(SRCS:%.c=%.o)
 
 NAME = Philosopher
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -g -fsanitize=address -Wall -Wextra -Werror -pthread
 
 all:		$(NAME)
 

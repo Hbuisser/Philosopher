@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 14:53:35 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 16:11:55 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ int complete_values(t_data *values)
 	int i;
 
 	i = 0;
-	// if (!(values->fork = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
-	// 	return (1);
 	if (!(values->iter = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);
 	while (i < values->nbr_of_philo)
@@ -85,26 +83,20 @@ int complete_values(t_data *values)
 		values->iter[i] = 0;
 		i++;
 	}
-	//print_array(values);
+	i = 0;
 	if (!(values->philo_num = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);
-	i = 0;
 	while (i < values->nbr_of_philo)
 	{
 		values->philo_num[i] = 0;
 		i++;
 	}
-	//print_array(values, values->philo_num);
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
-		//values->fork[i] = 1;
 		values->philo_num[i] = i;
-		//printf("philonum: %d\n", values->philo_num[i]);
 		i++;
 	}
-	//memset(values->iter, 0, values->nbr_of_philo);
-	//print_array(values, values->iter);
 	return (0);
 }
 
@@ -136,7 +128,7 @@ int init_struct(t_data *values)
 	values->time_to_eat = 0;
 	values->time_to_sleep = 0;
     values->nbr_of_time_each_philo_must_eat = 0;
-	// if (!(values->philo = malloc(sizeof(pthread_t))))
+	// if (!(values->thread = malloc(sizeof(pthread_t))))
 	// 	return (1);
 	// if (!(values->mutex = malloc(sizeof(pthread_mutex_t))))
 	// 	return (1);
