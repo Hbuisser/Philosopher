@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/17 19:51:47 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:15:57 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,7 @@
 
 int init_struct(t_data *values)
 {
-	int i;
-
-	i = 0;
-	printf("coucou init\n");
     values->nbr_of_philo = 0;
-	printf("coucou init\n");
 	values->time_to_die = 0;
 	values->time_to_eat = 0;
 	values->time_to_sleep = 0;
@@ -28,7 +23,6 @@ int init_struct(t_data *values)
 		return (1);
 	if (!(values->mutex = malloc(sizeof(pthread_mutex_t *))))
 		return (1);
-	//values->philo_num = 0;
 	return (0);
 }
 
