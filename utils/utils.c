@@ -6,25 +6,11 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 11:15:57 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 14:53:35 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-int init_struct(t_data *values)
-{
-    values->nbr_of_philo = 0;
-	values->time_to_die = 0;
-	values->time_to_eat = 0;
-	values->time_to_sleep = 0;
-    values->nbr_of_time_each_philo_must_eat = 0;
-	if (!(values->philo = malloc(sizeof(pthread_t *))))
-		return (1);
-	if (!(values->mutex = malloc(sizeof(pthread_mutex_t *))))
-		return (1);
-	return (0);
-}
 
 int	ft_atoi(const char *str)
 {
@@ -52,6 +38,19 @@ int	ft_atoi(const char *str)
 	return (digit * signe);
 }
 
+int print_array(t_data *values)
+{
+	int j;
+
+	j = 0;
+	while (j < values->nbr_of_philo)
+	{
+		printf("int: |%d|\n", values->iter[j]);
+		j++;
+	}
+	return(0);
+}
+
 int only_digit(char *str)
 {
 	int i;
@@ -66,37 +65,47 @@ int only_digit(char *str)
 	return (1);
 }
 
-int error_arg(int argc, char **argv)
-{
-	int i;
-
-	i = 1;
-	if (argc < 5)
-	{
-		write(2, "Not enough arguments\n", 21);
-		return (1);
-	}
-	else if (argc > 6)
-	{
-		write(2, "Too many arguments\n", 19);
-		return (1);
-	}
-	while (i < argc)
-	{
-		if (!only_digit(argv[i]))
-		{
-			write(2, "Invalid argument\n", 18);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
 t_data *get_struct(void)
 {
 	static t_data values;
 	return (&values);
+}
+
+int complete_values(t_data *values)
+{
+	int i;
+
+	i = 0;
+	// if (!(values->fork = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+	// 	return (1);
+	if (!(values->iter = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	while (i < values->nbr_of_philo)
+	{
+		values->iter[i] = 0;
+		i++;
+	}
+	//print_array(values);
+	if (!(values->philo_num = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		values->philo_num[i] = 0;
+		i++;
+	}
+	//print_array(values, values->philo_num);
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		//values->fork[i] = 1;
+		values->philo_num[i] = i;
+		//printf("philonum: %d\n", values->philo_num[i]);
+		i++;
+	}
+	//memset(values->iter, 0, values->nbr_of_philo);
+	//print_array(values, values->iter);
+	return (0);
 }
 
 int parse_values(t_data *values, int argc, char **argv)
@@ -120,21 +129,16 @@ int parse_values(t_data *values, int argc, char **argv)
 	return (0);
 }
 
-int complete_values(t_data *values)
+int init_struct(t_data *values)
 {
-	int i;
-
-	i = 0;
-	// if (!(values->fork = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+    values->nbr_of_philo = 0;
+	values->time_to_die = 0;
+	values->time_to_eat = 0;
+	values->time_to_sleep = 0;
+    values->nbr_of_time_each_philo_must_eat = 0;
+	// if (!(values->philo = malloc(sizeof(pthread_t))))
 	// 	return (1);
-	if (!(values->philo_num = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
-		return (1);
-	while (i < values->nbr_of_philo)
-	{
-		//values->fork[i] = 1;
-		values->philo_num[i] = i;
-		//printf("philonum: %d\n", values->philo_num[i]);
-		i++;
-	}
+	// if (!(values->mutex = malloc(sizeof(pthread_mutex_t))))
+	// 	return (1);
 	return (0);
 }

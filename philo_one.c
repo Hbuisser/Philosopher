@@ -6,11 +6,24 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 11:16:39 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 14:54:41 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
+
+int destroy_mutex(t_data *values)
+{
+	int i;
+
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		pthread_mutex_destroy(&values->mutex[i]);
+		i++;
+	}
+	return (0);
+}
 
 int sleeping(t_data *values, int i)
 {
@@ -41,20 +54,14 @@ void *routine(void *arg)
 
 	values = get_struct();
 	i = *(int *)arg;
-	pthread_mutex_lock(values->mutex[i]);
-	if (values->mutex[i + 1])
-		pthread_mutex_lock(values->mutex[i + 1]);
+	pthread_mutex_lock(&values->mutex[i]);
+	if (&values->mutex[i + 1])
+		pthread_mutex_lock(&values->mutex[i + 1]);
 	eating(values, i);
-	pthread_mutex_unlock(values->mutex[i]);
-	if (values->mutex[i + 1])
-		pthread_mutex_unlock(values->mutex[i + 1]);
-
-	// pthread_mutex_destroy(values->mutex[i]);
-	// if (values->mutex[i + 1])
-	// 	pthread_mutex_destroy(values->mutex[i + 1]);
-
+	pthread_mutex_unlock(&values->mutex[i]);
+	if (&values->mutex[i + 1])
+		pthread_mutex_unlock(&values->mutex[i + 1]);
 	sleeping(values, i);
-	
 	return (arg);
 }
 
@@ -63,14 +70,15 @@ int create_join(t_data *values, int i)
 	char *status;
 
 	status = NULL;
-	pthread_join(*values->philo[i], (void *)&status);
+	pthread_join(&values->philo[i], (void *)&status);
 	return (0);
 }
 
 int create_thread(t_data *values, int i)
 {
+	//print_array(values);
 	values->philo[i] = malloc(sizeof(pthread_t));
-	pthread_create(values->philo[i] , NULL, &routine, &i);
+	//pthread_create(values->philo[i] , NULL, &routine, &i);
 	return (0);
 }
 
@@ -79,14 +87,23 @@ int init_and_malloc_mutex(t_data *values)
 	int i;
 
 	i = 0;
+	//print_array(values);
+	// while (i < values->nbr_of_philo)
+	// {
+	// 	values->mutex[i] = malloc(sizeof(pthread_mutex_t));
+	// 	//pthread_mutex_init(values->mutex[i], NULL);
+	// 	i++;
+	// }
+	i = 0;
+	printf("nbr phil %d\n", values->nbr_of_philo);
 	while (i < values->nbr_of_philo)
 	{
 		values->mutex[i] = malloc(sizeof(pthread_mutex_t));
-		if (values->mutex[i + 1])
-			values->mutex[i + 1] = malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init(values->mutex[i], NULL);
+		pthread_mutex_init(&values->mutex[i], NULL);
 		i++;
 	}
+	printf("hello\n");
+	print_array(values);
 	return (0);
 }
 
@@ -95,6 +112,7 @@ int philo_in_action(t_data *values)
 	int i;
 
 	i = 0;
+	//print_array(values);
 	init_and_malloc_mutex(values);
 	while (i < values->nbr_of_philo)
 	{
@@ -107,7 +125,7 @@ int philo_in_action(t_data *values)
 		create_join(values, i);
 		i++;
 	}
-	//destroy
+	destroy_mutex(values);
 	return (0);
 }
 
@@ -126,76 +144,8 @@ int main(int argc, char **argv)
 		return (0);
 	if (complete_values(values))
 		return (0);
+	print_array(values);
 	philo_in_action(values);
+	//free_all(values);
 	return (0);
 }
-
-
-
-// void *routine(void *arg)
-// {
-// 	int i;
-// 	t_data *values;
-
-// 	values = get_struct();
-// 	i = *(int *)arg;
-// 	printf("i in routine: %d\n", i);
-// 	printf("fork in routine: %d\n", values->fork[0]);
-// 	while (1)
-// 	{
-// 		if (i != 0 && values->fork[i - 1] == 1)
-// 		{
-// 			values->fork[i - 1] = 0;
-// 			pthread_mutex_lock(values->mutex[i - 1]);
-// 			printf("is eating\n");
-// 			sleep(values->time_to_eat);
-// 			values->fork[i - 1] = 1;
-// 			pthread_mutex_unlock(values->mutex[i - 1]);
-// 			printf("is sleeping\n");
-// 			sleep(values->time_to_sleep);
-// 			break ;
-// 		}
-// 		// else
-// 		// {
-// 		// 	write(1, "is thinking\n", 12);
-// 		// 	break ;	
-// 		// }
-// 		//printf("dead\n");
-// 	}
-// 	return (arg);
-// }
-
-// int philo_one(t_data *values)
-// {
-// 	int i;
-// 	char *status;
-
-// 	i = 0;
-// 	status = NULL;
-// 	values->philo = malloc(sizeof(pthread_t *));
-// 	values->mutex = malloc(sizeof(pthread_mutex_t *));
-// 	values->fork = (int *)malloc(sizeof(int) * values->nbr_of_philo);
-// 	values->name = (int *)malloc(sizeof(int) * values->nbr_of_philo);
-// 	while (i < values->nbr_of_philo)
-// 	{
-// 		values->fork[i] = 1;
-// 		values->name[i] = i;
-// 		i++;
-// 	}
-// 	i = 0;
-// 	while (i < values->nbr_of_philo)
-// 	{
-// 		values->philo[i] = malloc(sizeof(pthread_t));
-// 		values->mutex[i] = malloc(sizeof(pthread_mutex_t));
-// 		pthread_mutex_init(values->mutex[i], NULL);
-// 		pthread_create(values->philo[i], NULL, &routine, &values->name[i]);
-// 		i++;
-// 	}
-// 	i = 0;
-// 	while (i < values->nbr_of_philo)
-// 	{
-// 		pthread_join(*values->philo[i], (void *)&status);
-// 		i++;
-// 	}
-// 	return(1);
-// }

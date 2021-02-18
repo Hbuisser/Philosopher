@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/17 19:42:37 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 14:51:41 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ typedef struct      s_data
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	nbr_of_time_each_philo_must_eat;
-    pthread_t **philo;
-    pthread_mutex_t **mutex;
-    int *fork;
     int *philo_num;
+    int *iter;
+    pthread_t *philo;
+    pthread_mutex_t *mutex;
+    //int *fork;
 }                   t_data;
 
 /*
@@ -43,12 +44,21 @@ int philo_one(t_data *values);
 *** Utils
 */
 
+int print_array(t_data *values);
 int	ft_atoi(const char *str);
 int only_digit(char *str);
-int error_arg(int argc, char **argv);
 t_data *get_struct(void);
 int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
 int complete_values(t_data *values);
+
+/*
+*** Errors and Free
+*/
+
+int error_arg(int argc, char **argv);
+int	ft_free_str(char **str, int result);
+int free_all(t_data *values);
+int ft_free_int(int i, int result);
 
 #endif
