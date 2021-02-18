@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 19:39:59 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 20:02:38 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void *routine_time(void *arg)
 
 	i = 0;
 	values = get_struct();
-	printf("time : %d\n", values->time_to_die);
+	printf("time : %d\n", values->clock_to_die[i]);
 	while (i < values->nbr_of_philo)
 	{
-		
+		//
 		i++;
 	}
 	return (arg);
@@ -69,8 +69,11 @@ int eating(t_data *values, int i)
 	struct timeval temps_apres;
 	long int time;
 	
+	//
 	printf("Philo %d is eating\n", i + 1);
 	gettimeofday(&temps_avant, NULL);
+	values->clock_to_die[i] = temps_avant.tv_usec * 1000000 + temps_avant.tv_usec;
+	printf("time : %d\n", values->clock_to_die[i]);
 	usleep(values->time_to_eat);
 	gettimeofday(&temps_apres, NULL);
 	time = ((((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000 + temps_apres.tv_usec) - temps_avant.tv_usec));

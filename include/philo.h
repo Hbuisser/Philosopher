@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/18 19:05:52 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 19:59:45 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ typedef struct      s_data
 	int	nbr_of_time_each_philo_must_eat;
     int *philo_num;
     int *iter;
-    // int fork_L;
-    // int fork_R;
+    int *clock_to_die;
     pthread_t *thread;
     pthread_t time;
     pthread_mutex_t *mutex;

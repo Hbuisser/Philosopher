@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 19:06:42 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 19:59:35 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,14 @@ int complete_values(t_data *values)
 		i++;
 	}
 	i = 0;
+	if (!(values->clock_to_die = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	while (i < values->nbr_of_philo)
+	{
+		values->clock_to_die[i] = 0;
+		i++;
+	}
+	i = 0;
 	while (i < values->nbr_of_philo)
 	{
 		values->philo_num[i] = i;
@@ -147,7 +155,5 @@ int init_struct(t_data *values)
 	values->time_to_eat = 0;
 	values->time_to_sleep = 0;
     values->nbr_of_time_each_philo_must_eat = 0;
-	// values->fork_L = 1;
-	// values->fork_R = 1;
 	return (0);
 }
