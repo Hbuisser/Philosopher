@@ -46,7 +46,7 @@ int philo_one(t_data *values);
 int	ft_atoi(const char *str);
 int only_digit(char *str);
 int error_arg(int argc, char **argv);
-t_data **get_struct(void);
+t_data *get_struct(void);
 int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
 int complete_values(t_data *values);

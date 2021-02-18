@@ -15,6 +15,7 @@
 int sleeping(t_data *values, int i)
 {
 	printf("Philo %d dort\n", values->philo_num[i]);
+	usleep(values->time_to_sleep);
 	return (0);
 }
 
@@ -24,12 +25,12 @@ int eating(t_data *values, int i)
 	struct timeval temps_apres;
 	long int time;
 	
-	printf("Philo %d mange\n", values->philo_num[i]);
+	printf("Philo %d mange\n", i + 1);
 	gettimeofday (&temps_avant, NULL);
 	usleep(values->time_to_eat);
 	gettimeofday (&temps_apres, NULL);
 	time = ((((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000 + temps_apres.tv_usec) - temps_avant.tv_usec) * 1000);
-	printf("Philo %d a terminé de manger apres %ld ms\n", values->philo_num[i], time);
+	printf("Philo %d a terminé de manger apres %ld ms\n", i + 1, time);
 	return (0);
 }
 
@@ -37,26 +38,13 @@ void *routine(void *arg)
 {
 	t_data *values;
 	int i;
-	int j;
 
-	values = *get_struct();
+	values = get_struct();
 	i = *(int *)arg;
-	j = 0;
-	// while (j < values->nbr_of_philo)
-	// {
-	// 	printf("philonum: %d\n", values->philo_num[i]);
-	// 	j++;
-	// }
-	// pthread_mutex_init(values->mutex[i], NULL);
-	// if (values->mutex[i + 1])
-	// 	pthread_mutex_init(values->mutex[i + 1], NULL);
-		
 	pthread_mutex_lock(values->mutex[i]);
 	if (values->mutex[i + 1])
 		pthread_mutex_lock(values->mutex[i + 1]);
-
-	//eating(values, i);
-
+	eating(values, i);
 	pthread_mutex_unlock(values->mutex[i]);
 	if (values->mutex[i + 1])
 		pthread_mutex_unlock(values->mutex[i + 1]);
@@ -65,7 +53,7 @@ void *routine(void *arg)
 	// if (values->mutex[i + 1])
 	// 	pthread_mutex_destroy(values->mutex[i + 1]);
 
-	//sleeping(values, i);
+	sleeping(values, i);
 	
 	return (arg);
 }
@@ -94,6 +82,8 @@ int init_and_malloc_mutex(t_data *values)
 	while (i < values->nbr_of_philo)
 	{
 		values->mutex[i] = malloc(sizeof(pthread_mutex_t));
+		if (values->mutex[i + 1])
+			values->mutex[i + 1] = malloc(sizeof(pthread_mutex_t));
 		pthread_mutex_init(values->mutex[i], NULL);
 		i++;
 	}
@@ -109,35 +99,34 @@ int philo_in_action(t_data *values)
 	while (i < values->nbr_of_philo)
 	{
 		create_thread(values, i);
+		i++;
+	}
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
 		create_join(values, i);
 		i++;
 	}
+	//destroy
 	return (0);
 }
 
 int main(int argc, char **argv) 
 {
-	t_data values;
+	t_data *values;
 	int i;
-	int j;
 
 	i = 0;
-	j = 0;
+	values = get_struct();
 	if (error_arg(argc, argv))
 		return (0);
-	if (init_struct(&values))
+	if (init_struct(values))
 		return (0);
-	*get_struct() = &values;
-	if (parse_values(&values, argc, argv))
+	if (parse_values(values, argc, argv))
 		return (0);
-	if (complete_values(&values))
+	if (complete_values(values))
 		return (0);
-	while (j < values.nbr_of_philo)
-	{
-		printf("philonum: %d\n", values.philo_num[j]);
-		j++;
-	}
-	philo_in_action(&values);
+	philo_in_action(values);
 	return (0);
 }
 

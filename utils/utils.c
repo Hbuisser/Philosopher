@@ -93,9 +93,9 @@ int error_arg(int argc, char **argv)
 	return (0);
 }
 
-t_data **get_struct(void)
+t_data *get_struct(void)
 {
-	static t_data *values;
+	static t_data values;
 	return (&values);
 }
 
