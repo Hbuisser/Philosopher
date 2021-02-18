@@ -70,40 +70,34 @@ int create_join(t_data *values, int i)
 	char *status;
 
 	status = NULL;
-	pthread_join(&values->philo[i], (void *)&status);
+	pthread_join(values->philo[i], (void *)&status);
 	return (0);
 }
 
 int create_thread(t_data *values, int i)
 {
 	//print_array(values);
-	values->philo[i] = malloc(sizeof(pthread_t));
-	//pthread_create(values->philo[i] , NULL, &routine, &i);
+	printf("hello\n");
+	pthread_create(&values->philo[i] , NULL, &routine, &values->iter);
+	
 	return (0);
 }
 
-int init_and_malloc_mutex(t_data *values)
+int init_and_malloc_mutex_and_philo(t_data *values)
 {
 	int i;
 
 	i = 0;
-	//print_array(values);
-	// while (i < values->nbr_of_philo)
-	// {
-	// 	values->mutex[i] = malloc(sizeof(pthread_mutex_t));
-	// 	//pthread_mutex_init(values->mutex[i], NULL);
-	// 	i++;
-	// }
+	values->mutex = malloc(sizeof(pthread_mutex_t) * values->nbr_of_philo);
+	memset(values->mutex, 0, values->nbr_of_philo * 8);
 	i = 0;
-	printf("nbr phil %d\n", values->nbr_of_philo);
 	while (i < values->nbr_of_philo)
 	{
-		values->mutex[i] = malloc(sizeof(pthread_mutex_t));
 		pthread_mutex_init(&values->mutex[i], NULL);
 		i++;
 	}
-	printf("hello\n");
-	print_array(values);
+	values->philo = malloc(sizeof(pthread_t) * values->nbr_of_philo);
+	memset(values->philo, 0, values->nbr_of_philo * 8);
 	return (0);
 }
 
@@ -113,18 +107,23 @@ int philo_in_action(t_data *values)
 
 	i = 0;
 	//print_array(values);
-	init_and_malloc_mutex(values);
+	printf("avant init\n");
+	init_and_malloc_mutex_and_philo(values);
+	printf("apres init\n");
 	while (i < values->nbr_of_philo)
 	{
 		create_thread(values, i);
 		i++;
 	}
+	printf("apres create\n");
+	//print_array(values);
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
 		create_join(values, i);
 		i++;
 	}
+	printf("apres join\n");
 	destroy_mutex(values);
 	return (0);
 }
