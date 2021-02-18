@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 16:11:55 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 16:28:08 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int complete_values(t_data *values)
 		return (1);
 	while (i < values->nbr_of_philo)
 	{
-		values->iter[i] = 0;
+		values->iter[i] = i;
 		i++;
 	}
 	i = 0;
@@ -128,9 +128,5 @@ int init_struct(t_data *values)
 	values->time_to_eat = 0;
 	values->time_to_sleep = 0;
     values->nbr_of_time_each_philo_must_eat = 0;
-	// if (!(values->thread = malloc(sizeof(pthread_t))))
-	// 	return (1);
-	// if (!(values->mutex = malloc(sizeof(pthread_mutex_t))))
-	// 	return (1);
 	return (0);
 }

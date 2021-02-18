@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 16:10:09 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 16:30:01 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int destroy_mutex(t_data *values)
 
 int sleeping(t_data *values, int i)
 {
-	//printf("Philo %d dort\n", values->philo_num[i]);
 	i = 0;
-	write(2, "Philo dort\n", 11);
+	//write(2, "Philo dort\n", 11);
+	printf("Philo %d dort\n", values->philo_num[i]);
 	usleep(values->time_to_sleep);
 	return (0);
 }
@@ -74,14 +74,13 @@ int init_and_malloc_mutex_and_philo(t_data *values)
 	i = 0;
 	values->mutex = malloc(sizeof(pthread_mutex_t) * values->nbr_of_philo);
 	memset(values->mutex, 0, values->nbr_of_philo * 8);
-	i = 0;
+	values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
+	memset(values->thread, 0, values->nbr_of_philo * 8);
 	while (i < values->nbr_of_philo)
 	{
 		pthread_mutex_init(&values->mutex[i], NULL);
 		i++;
 	}
-	values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
-	memset(values->thread, 0, values->nbr_of_philo * 8);
 	return (0);
 }
 
@@ -95,7 +94,7 @@ int philo_in_action(t_data *values)
 	init_and_malloc_mutex_and_philo(values);
 	while (i < values->nbr_of_philo)
 	{
-		pthread_create(&values->thread[i] , NULL, &routine, &values->iter);
+		pthread_create(&values->thread[i] , NULL, &routine, &values->iter[i]);
 		i++;
 	}
 	i = 0;
@@ -123,7 +122,6 @@ int main(int argc, char **argv)
 		return (0);
 	if (complete_values(values))
 		return (0);
-	print_array(values);
 	philo_in_action(values);
 	//free_all(values);
 	return (0);
