@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 16:28:08 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/18 19:06:42 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,25 @@ t_data *get_struct(void)
 	return (&values);
 }
 
+int check_time(t_data *values)
+{
+	int time_eat_sleep;
+
+	time_eat_sleep = values->time_to_eat + values->time_to_sleep;
+	if (values->time_to_die < values->time_to_eat ||
+		values->time_to_die < values->time_to_sleep)
+	{
+		write(2, "Not enough time to die\n", 23);
+		return (1);
+	}
+	if (values->time_to_die < time_eat_sleep)
+	{
+		write(2, "Not enough time to die\n", 23);
+		return (1);
+	}
+	return (0);
+}
+
 int complete_values(t_data *values)
 {
 	int i;
@@ -88,7 +107,7 @@ int complete_values(t_data *values)
 		return (1);
 	while (i < values->nbr_of_philo)
 	{
-		values->philo_num[i] = 0;
+		values->philo_num[i] = i + 1;
 		i++;
 	}
 	i = 0;
@@ -128,5 +147,7 @@ int init_struct(t_data *values)
 	values->time_to_eat = 0;
 	values->time_to_sleep = 0;
     values->nbr_of_time_each_philo_must_eat = 0;
+	// values->fork_L = 1;
+	// values->fork_R = 1;
 	return (0);
 }
