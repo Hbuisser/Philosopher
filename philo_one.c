@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/19 18:55:29 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/19 19:27:43 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ void *routine_time(void *arg)
 
 int thinking(t_data *values, int i)
 {
+	char time;
+
+	i = 0;
+	time = (char)get_time();
 	values->nbr_of_time_each_philo_must_eat = 0;
 	if (values->status == -1)
 		printf("Philo %d pense\n", i + 1);
@@ -112,13 +116,14 @@ void *routine(void *arg)
 	values->last_eat[fork] = get_time();
 	while (values->status == -1)
 	{
+		thinking(values, fork);
 		pthread_mutex_lock(&values->mutex[fork]);
 		pthread_mutex_lock(&values->mutex[next_fork]);
 		eating(values, fork);
 		pthread_mutex_unlock(&values->mutex[fork]);
 		pthread_mutex_unlock(&values->mutex[next_fork]);
 		sleeping(values, fork);
-		thinking(values, fork);
+		//thinking(values, fork);
 		//break ;
 	}
 	return (arg);
