@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 20:02:38 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:22:10 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,14 @@ void *routine_time(void *arg)
 
 	i = 0;
 	values = get_struct();
-	printf("time : %d\n", values->clock_to_die[i]);
-	while (i < values->nbr_of_philo)
+	//while(1)
 	{
-		//
-		i++;
+		// while (i < values->nbr_of_philo)
+		// {
+		 	printf("time in routine time: %d\n", values->clock_to_die[i]);
+		// 	i++;
+		// }
+		//if (values->clock_to_die > values->time_to_die)
 	}
 	return (arg);
 }
@@ -52,14 +55,13 @@ int sleeping(t_data *values, int i)
 {
 	struct timeval temps_avant;
 	struct timeval temps_apres;
-	long int time;
 
 	printf("Philo %d dort\n", i + 1);
 	gettimeofday(&temps_avant, NULL);
 	usleep(values->time_to_sleep);
 	gettimeofday(&temps_apres, NULL);
-	time = ((((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000 + temps_apres.tv_usec) - temps_avant.tv_usec));
-	printf("Philo %d a terminé de dormir apres %ld ms\n", i + 1, time);
+	values->t = ((((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000 + temps_apres.tv_usec) - temps_avant.tv_usec));
+	printf("Philo %d a terminé de dormir apres %ld ms\n", i + 1, values->t);
 	return (0);
 }
 
@@ -67,17 +69,15 @@ int eating(t_data *values, int i)
 {
 	struct timeval temps_avant;
 	struct timeval temps_apres;
-	long int time;
 	
-	//
-	printf("Philo %d is eating\n", i + 1);
 	gettimeofday(&temps_avant, NULL);
-	values->clock_to_die[i] = temps_avant.tv_usec * 1000000 + temps_avant.tv_usec;
-	printf("time : %d\n", values->clock_to_die[i]);
+	values->clock_to_die[i] = temps_avant.tv_usec / 1000;
+	printf("Philo %d is eating\n", i + 1);
+	//printf("time philo %d begin to eat in ms: %d\n", i + 1, values->clock_to_die[i]);
 	usleep(values->time_to_eat);
 	gettimeofday(&temps_apres, NULL);
-	time = ((((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000 + temps_apres.tv_usec) - temps_avant.tv_usec));
-	printf("Philo %d a terminé de manger apres %ld ms\n", i + 1, time);
+	values->t = ((((temps_apres.tv_sec - temps_avant.tv_sec) * 1000000 + temps_apres.tv_usec) - temps_avant.tv_usec));
+	printf("Philo %d a terminé de manger apres %ld ms\n", i + 1, values->t);
 	return (0);
 }
 
@@ -86,14 +86,13 @@ void *routine(void *arg)
 	t_data *values;
 	int fork;
 	int next_fork;
-	struct timeval t_avant;
-	struct timeval t_apres;
-	long int time;
+	//struct timeval t_avant;
+	//struct timeval t_apres;
 
 	values = get_struct();
 	fork = *(int *)arg;
 	next_fork = (fork + 1) % values->nbr_of_philo;
-	time = ((((t_apres.tv_sec - t_avant.tv_sec) * 1000000 + t_apres.tv_usec) - t_avant.tv_usec) * 1000);
+	//values->t = ((((t_apres.tv_sec - t_avant.tv_sec) * 1000000 + t_apres.tv_usec) - t_avant.tv_usec) * 1000);
 	while (1)
 	{
 		pthread_mutex_lock(&values->mutex[fork]);
@@ -129,22 +128,24 @@ int philo_in_action(t_data *values)
 {
 	int i;
 	int *status;
+	// struct timeval t_start;
+	// struct timeval t_end;
+	t_time	time;
 
 	status = NULL;
-	i = 0;
+	i = -1;
 	init_and_malloc_mutex_and_thread(values);
+	gettimeofday(&time.t_start, NULL);
+	usleep(60);
+	gettimeofday(&time.t_end, NULL);
+	time.time = ((((time.t_end.tv_sec - time.t_start.tv_sec) * 1000000 + time.t_end.tv_usec) - time.t_start.tv_usec));
+	printf("time struct: %ld\n", time.time);
 	pthread_create(&values->time, NULL, &routine_time, NULL);
-	while (i < values->nbr_of_philo)
-	{
+	while (++i < values->nbr_of_philo)
 		pthread_create(&values->thread[i] , NULL, &routine, &values->iter[i]);
-		i++;
-	}
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
+	i = -1;
+	while (++i < values->nbr_of_philo)
 		pthread_join(values->thread[i], (void *)&status);
-		i++;
-	}
 	pthread_join(values->time, (void *)&status);
 	destroy_mutex(values);
 	return (0);
