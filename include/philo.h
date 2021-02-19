@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/19 11:16:26 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:37:04 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,17 @@ typedef struct      s_data
     pthread_t *thread;
     pthread_t time;
     pthread_mutex_t *mutex;
+    struct timeval t_start;
+	struct timeval t_end;
     long int t;
 }                   t_data;
 
-typedef struct      s_time
-{
-    struct timeval t_start;
-	struct timeval t_end;
-    long int time;
-}                   t_time;
+// typedef struct      s_time
+// {
+//     struct timeval t_start;
+// 	struct timeval t_end;
+//     long int time;
+// }                   t_time;
 
 /*
 *** Philo_one

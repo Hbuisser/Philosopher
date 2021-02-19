@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/19 11:02:16 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:31:42 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,6 @@ int init_struct(t_data *values)
 	values->time_to_eat = 0;
 	values->time_to_sleep = 0;
     values->nbr_of_time_each_philo_must_eat = 0;
-	values->time = 0;
+	values->t = 0;
 	return (0);
 }
