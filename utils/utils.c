@@ -6,11 +6,22 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/19 11:31:42 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:53:15 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+long    get_time(void)
+{
+    struct timeval  tp;
+    long            milliseconds;
+
+    gettimeofday(&tp, NULL);
+    milliseconds = tp.tv_sec * 1000;
+    milliseconds += tp.tv_usec / 1000;
+    return (milliseconds);
+}
 
 int	ft_atoi(const char *str)
 {
@@ -45,7 +56,7 @@ int print_array(t_data *values)
 	j = 0;
 	while (j < values->nbr_of_philo)
 	{
-		printf("int: |%d|\n", values->iter[j]);
+		printf("int: |%ld|\n", values->last_eat[j]);
 		j++;
 	}
 	return(0);
@@ -111,11 +122,11 @@ int complete_values(t_data *values)
 		i++;
 	}
 	i = 0;
-	if (!(values->clock_to_die = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+	if (!(values->last_eat = (long int *)malloc(sizeof(long int) * values->nbr_of_philo)))
 		return (1);
 	while (i < values->nbr_of_philo)
 	{
-		values->clock_to_die[i] = 0;
+		values->last_eat[i] = 0;
 		i++;
 	}
 	i = 0;
@@ -156,5 +167,6 @@ int init_struct(t_data *values)
 	values->time_to_sleep = 0;
     values->nbr_of_time_each_philo_must_eat = 0;
 	values->t = 0;
+	values->status = -1;
 	return (0);
 }

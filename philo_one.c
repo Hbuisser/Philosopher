@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/19 11:53:55 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:55:29 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,41 @@ int destroy_mutex(t_data *values)
 
 void *routine_time(void *arg)
 {
-	int i;
 	t_data *values;
+	int status;
+	long int t_check;
+	long int diff;
+	int i;
 
 	i = 0;
 	values = get_struct();
-	//while(1)
-	//{
-		// while (i < values->nbr_of_philo)
-		// {
-		 	//printf("time in routine time: %d\n", values->clock_to_die[i]);
-		// 	i++;
-		// }
-		//if (values->clock_to_die > values->time_to_die)
-	//}
+	status = -1;
+	while(values->status == -1)
+	{
+		i = 0;
+		while (i < values->nbr_of_philo)
+		{
+			usleep(5000);
+			t_check = get_time();
+			diff = t_check - values->last_eat[i];
+			if (diff > values->time_to_die)
+			{
+			 	values->status = 1;
+				printf("philo %d is dead ms\n", i);
+				return (0);
+			}
+			i++;
+		}
+		//break ;
+	}
 	return (arg);
 }
 
 int thinking(t_data *values, int i)
 {
 	values->nbr_of_time_each_philo_must_eat = 0;
-	printf("Philo %d pense\n", i + 1);
+	if (values->status == -1)
+		printf("Philo %d pense\n", i + 1);
 	return (0);
 }
 
@@ -57,12 +71,14 @@ int sleeping(t_data *values, int i)
 	struct timeval t_end;
 	long int t;
 
-	printf("Philo %d dort\n", i + 1);
+	if (values->status == -1)
+		printf("Philo %d dort\n", i + 1);
 	gettimeofday(&t_start, NULL);
-	usleep(values->time_to_sleep);
+	usleep(values->time_to_sleep * 1000);
 	gettimeofday(&t_end, NULL);
 	t = ((((t_end.tv_sec - t_start.tv_sec) * 1000000 + t_end.tv_usec) - t_start.tv_usec));
-	printf("Philo %d a terminé de dormir apres %ld ms\n", i + 1, t);
+	if (values->status == -1)
+		printf("Philo %d a terminé de dormir apres %ld ms\n", i + 1, t);
 	return (0);
 }
 
@@ -72,17 +88,14 @@ int eating(t_data *values, int i)
 	struct timeval t_end;
 	long int t;
 	
+	if (values->status == -1)
+		printf("Philo %d is eating\n", i + 1);
 	gettimeofday(&t_start, NULL);
-	gettimeofday(&values->t_end, NULL);
-	values->t = ((((values->t_end.tv_sec - values->t_start.tv_sec) * 1000000 + values->t_end.tv_usec) - values->t_start.tv_usec));
-	printf("time philo %d before eating sinds begin: %ld\n", i + 1, values->t);
-	gettimeofday(&values->t_start, NULL);
-	//values->clock_to_die[i] = t_start.tv_usec / 1000;
-	printf("Philo %d is eating\n", i + 1);
-	//printf("time philo %d begin to eat in ms: %d\n", i + 1, values->clock_to_die[i]);
-	usleep(values->time_to_eat);
+	values->last_eat[i] = get_time();
+	usleep(values->time_to_eat * 1000);
 	gettimeofday(&t_end, NULL);
 	t = ((((t_end.tv_sec - t_end.tv_sec) * 1000000 + t_end.tv_usec) - t_start.tv_usec));
+		if (values->status == -1)
 	printf("Philo %d a terminé de manger apres %ld ms\n", i + 1, t);
 	return (0);
 }
@@ -96,7 +109,8 @@ void *routine(void *arg)
 	values = get_struct();
 	fork = *(int *)arg;
 	next_fork = (fork + 1) % values->nbr_of_philo;
-	while (1)
+	values->last_eat[fork] = get_time();
+	while (values->status == -1)
 	{
 		pthread_mutex_lock(&values->mutex[fork]);
 		pthread_mutex_lock(&values->mutex[next_fork]);
@@ -105,7 +119,7 @@ void *routine(void *arg)
 		pthread_mutex_unlock(&values->mutex[next_fork]);
 		sleeping(values, fork);
 		thinking(values, fork);
-		break ;
+		//break ;
 	}
 	return (arg);
 }
@@ -133,14 +147,10 @@ int philo_in_action(t_data *values)
 	int *status;
 
 	status = NULL;
-	i = -1;
 	init_and_malloc_mutex_and_thread(values);
-	gettimeofday(&values->t_start, NULL);
-	// usleep(60);
-	// gettimeofday(&values->t_end, NULL);
-	// values->t = ((((values->t_end.tv_sec - values->t_start.tv_sec) * 1000000 + values->t_end.tv_usec) - values->t_start.tv_usec));
-	// printf("time struct: %ld\n", values->t);
+	values->t = get_time();
 	pthread_create(&values->time, NULL, &routine_time, NULL);
+	i = -1;
 	while (++i < values->nbr_of_philo)
 		pthread_create(&values->thread[i] , NULL, &routine, &values->iter[i]);
 	i = -1;
