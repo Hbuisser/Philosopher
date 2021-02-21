@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/21 12:50:21 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/21 13:51:20 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,25 @@ int destroy_mutex(t_data *values)
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
+		pthread_mutex_unlock(&values->mutex[i]);
 		pthread_mutex_destroy(&values->mutex[i]);
 		i++;
 	}
 	return (0);
+}
+
+void lock_mutex()
+{
+	int i;
+	t_data *values;
+
+	values = get_struct();
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		pthread_mutex_lock(&values->mutex[i]);
+		i++;
+	}
 }
 
 void *routine_time(void *arg)
@@ -35,7 +50,7 @@ void *routine_time(void *arg)
 	while(values->status == -1)
 	{
 		i = 0;
-		usleep(5000);
+		usleep(4000);
 		while (i < values->nbr_of_philo)
 		{
 			diff = get_time() - values->last_eat[i];
@@ -43,6 +58,7 @@ void *routine_time(void *arg)
 			{
 			 	values->status = 1;
 				printf("philo %d is dead ms\n", i + 1);
+				lock_mutex();
 				return (0);
 			}
 			i++;
@@ -53,16 +69,22 @@ void *routine_time(void *arg)
 
 int thinking(t_data *values, int i)
 {
+	long int time;
+
+	time = get_time() - values->t_start;
 	if (values->status == -1)
-		printf("Philo %d pense\n", i + 1);
+		printf("%ld %d is thinking\n", time, i + 1);
 	return (0);
 }
 
 int sleeping(t_data *values, int i)
 {
+	long int time;
+
+	time = get_time() - values->t_start;
 	if (values->status == -1)
 	{
-		printf("Philo %d dort\n", i + 1);
+		printf("%ld %d is sleeping\n", time, i + 1);
 		usleep(values->time_to_sleep * 1000);
 	}
 	return (0);
@@ -70,9 +92,12 @@ int sleeping(t_data *values, int i)
 
 int eating(t_data *values, int i)
 {
+	long int time;
+
+	time = get_time() - values->t_start;
 	if (values->status == -1)
 	{
-		printf("Philo %d is eating\n", i + 1);
+		printf("%ld %d is eating\n", time, i + 1);
 		values->last_eat[i] = get_time();
 		usleep(values->time_to_eat * 1000);
 	}
@@ -90,18 +115,16 @@ void *routine(void *arg)
 	fork = 0;
 	next_fork = 0;
 	i = *(int *)arg;
-	if (i == 0)
-	{
-		fork = (i + 1) % values->nbr_of_philo;
-		next_fork = i;
-	}
-	else 
-	{
-		fork = i;
-		next_fork = (i + 1) % values->nbr_of_philo;
-	}
+	// if (i == 0)
+	// {
+	// 	fork = (i + 1) % values->nbr_of_philo;
+	// 	next_fork = i;
+	// }
+	// else 
+	// {
 	fork = i;
 	next_fork = (i + 1) % values->nbr_of_philo;
+	// }
 	values->last_eat[i] = get_time();
 	while (values->status == -1)
 	{
@@ -140,7 +163,7 @@ int philo_in_action(t_data *values)
 
 	status = NULL;
 	init_and_malloc_mutex_and_thread(values);
-	values->t = get_time();
+	values->t_start = get_time();
 	pthread_create(&values->time, NULL, &routine_time, NULL);
 	i = -1;
 	while (++i < values->nbr_of_philo)
