@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/21 11:41:09 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/21 12:50:21 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,25 @@ int destroy_mutex(t_data *values)
 void *routine_time(void *arg)
 {
 	t_data *values;
-	int status;
-	long int t_check;
 	long int diff;
 	int i;
 
-	i = 0;
 	values = get_struct();
-	status = -1;
 	while(values->status == -1)
 	{
 		i = 0;
+		usleep(5000);
 		while (i < values->nbr_of_philo)
 		{
-			usleep(5000);
-			t_check = get_time();
-			diff = t_check - values->last_eat[i];
+			diff = get_time() - values->last_eat[i];
 			if (diff > values->time_to_die)
 			{
 			 	values->status = 1;
-				printf("philo %d is dead ms\n", i);
+				printf("philo %d is dead ms\n", i + 1);
 				return (0);
 			}
 			i++;
 		}
-		//break ;
 	}
 	return (arg);
 }
@@ -93,17 +87,21 @@ void *routine(void *arg)
 	int i;
 
 	values = get_struct();
+	fork = 0;
+	next_fork = 0;
 	i = *(int *)arg;
-	if (i % 2 == 0)
-	{
-		fork = i;
-		next_fork = (i + 1) % values->nbr_of_philo;
-	}
-	else 
+	if (i == 0)
 	{
 		fork = (i + 1) % values->nbr_of_philo;
 		next_fork = i;
 	}
+	else 
+	{
+		fork = i;
+		next_fork = (i + 1) % values->nbr_of_philo;
+	}
+	fork = i;
+	next_fork = (i + 1) % values->nbr_of_philo;
 	values->last_eat[i] = get_time();
 	while (values->status == -1)
 	{
@@ -114,7 +112,6 @@ void *routine(void *arg)
 		pthread_mutex_unlock(&values->mutex[fork]);
 		pthread_mutex_unlock(&values->mutex[next_fork]);
 		sleeping(values, i);
-		//break ;
 	}
 	return (arg);
 }
