@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/19 19:27:43 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/21 11:41:09 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,6 @@ void *routine_time(void *arg)
 
 int thinking(t_data *values, int i)
 {
-	char time;
-
-	i = 0;
-	time = (char)get_time();
-	values->nbr_of_time_each_philo_must_eat = 0;
 	if (values->status == -1)
 		printf("Philo %d pense\n", i + 1);
 	return (0);
@@ -71,36 +66,22 @@ int thinking(t_data *values, int i)
 
 int sleeping(t_data *values, int i)
 {
-	struct timeval t_start;
-	struct timeval t_end;
-	long int t;
-
 	if (values->status == -1)
+	{
 		printf("Philo %d dort\n", i + 1);
-	gettimeofday(&t_start, NULL);
-	usleep(values->time_to_sleep * 1000);
-	gettimeofday(&t_end, NULL);
-	t = ((((t_end.tv_sec - t_start.tv_sec) * 1000000 + t_end.tv_usec) - t_start.tv_usec));
-	if (values->status == -1)
-		printf("Philo %d a terminé de dormir apres %ld ms\n", i + 1, t);
+		usleep(values->time_to_sleep * 1000);
+	}
 	return (0);
 }
 
 int eating(t_data *values, int i)
 {
-	struct timeval t_start;
-	struct timeval t_end;
-	long int t;
-	
 	if (values->status == -1)
+	{
 		printf("Philo %d is eating\n", i + 1);
-	gettimeofday(&t_start, NULL);
-	values->last_eat[i] = get_time();
-	usleep(values->time_to_eat * 1000);
-	gettimeofday(&t_end, NULL);
-	t = ((((t_end.tv_sec - t_end.tv_sec) * 1000000 + t_end.tv_usec) - t_start.tv_usec));
-		if (values->status == -1)
-	printf("Philo %d a terminé de manger apres %ld ms\n", i + 1, t);
+		values->last_eat[i] = get_time();
+		usleep(values->time_to_eat * 1000);
+	}
 	return (0);
 }
 
@@ -109,21 +90,30 @@ void *routine(void *arg)
 	t_data *values;
 	int fork;
 	int next_fork;
+	int i;
 
 	values = get_struct();
-	fork = *(int *)arg;
-	next_fork = (fork + 1) % values->nbr_of_philo;
-	values->last_eat[fork] = get_time();
+	i = *(int *)arg;
+	if (i % 2 == 0)
+	{
+		fork = i;
+		next_fork = (i + 1) % values->nbr_of_philo;
+	}
+	else 
+	{
+		fork = (i + 1) % values->nbr_of_philo;
+		next_fork = i;
+	}
+	values->last_eat[i] = get_time();
 	while (values->status == -1)
 	{
-		thinking(values, fork);
+		thinking(values, i);
 		pthread_mutex_lock(&values->mutex[fork]);
 		pthread_mutex_lock(&values->mutex[next_fork]);
-		eating(values, fork);
+		eating(values, i);
 		pthread_mutex_unlock(&values->mutex[fork]);
 		pthread_mutex_unlock(&values->mutex[next_fork]);
-		sleeping(values, fork);
-		//thinking(values, fork);
+		sleeping(values, i);
 		//break ;
 	}
 	return (arg);
@@ -181,8 +171,6 @@ int main(int argc, char **argv)
 		return (0);
 	if (complete_values(values))
 		return (0);
-	// if (check_time(values))
-	// 	return (0);
 	philo_in_action(values);
 	//free_all(values);
 	return (0);
