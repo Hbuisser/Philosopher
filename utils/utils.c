@@ -6,47 +6,48 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/21 12:58:43 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 12:48:30 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
+// char *print_str(long int t, int ph, )
+// {
+// 	char *time;
+// 	char *philo;
+
+// 	time = ft_itoa()
+// 	return (str);
+// }
+
+char *print_str_dead(int i, long int diff)
+{
+	char *philo;
+	char *time;
+	char *str;
+	char *mess;
+
+	mess = ft_strdup(" died\n");
+	philo = ft_itoa(i);
+	time = ft_itoa((int)diff);
+	str = ft_strjoin(time, " ");
+	str = ft_strjoin(str, philo);
+	str = ft_strjoin(str, mess);
+	write(1, str, ft_strlen(str));
+	free(str);
+	return (str);
+}
+
 long    get_time(void)
 {
     struct timeval  tp;
-    long            milliseconds;
+    long milliseconds;
 
     gettimeofday(&tp, NULL);
     milliseconds = tp.tv_sec * 1000;
     milliseconds += tp.tv_usec / 1000;
     return (milliseconds);
-}
-
-int	ft_atoi(const char *str)
-{
-	int					i;
-	int					signe;
-	unsigned long long	prev;
-	unsigned long long	digit;
-
-	i = 0;
-	prev = 0;
-	digit = 0;
-	signe = 1;
-	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\r' || str[i] == '\t'
-		|| str[i] == '\v' || str[i] == '\f')
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-		signe = (str[i++] == '-') ? -1 : 1;
-	while (str[i] > 47 && str[i] < 58)
-	{
-		digit = digit * 10 + (str[i++] - '0');
-		if (digit < prev || digit >= 9223372036854775807)
-			return ((signe == -1) ? 0 : -1);
-		prev = digit;
-	}
-	return (digit * signe);
 }
 
 int print_array(t_data *values)
@@ -105,36 +106,24 @@ int complete_values(t_data *values)
 {
 	int i;
 
-	i = 0;
+	i = -1;
 	if (!(values->iter = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);
-	while (i < values->nbr_of_philo)
-	{
+	while (++i < values->nbr_of_philo)
 		values->iter[i] = i;
-		i++;
-	}
-	i = 0;
+	i = -1;
 	if (!(values->philo_num = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);
-	while (i < values->nbr_of_philo)
-	{
+	while (++i < values->nbr_of_philo)
 		values->philo_num[i] = i + 1;
-		i++;
-	}
-	i = 0;
+	i = -1;
 	if (!(values->last_eat = (long int *)malloc(sizeof(long int) * values->nbr_of_philo)))
 		return (1);
-	while (i < values->nbr_of_philo)
-	{
+	while (++i < values->nbr_of_philo)
 		values->last_eat[i] = 0;
-		i++;
-	}
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
+	i = -1;
+	while (++i < values->nbr_of_philo)
 		values->philo_num[i] = i;
-		i++;
-	}
 	return (0);
 }
 

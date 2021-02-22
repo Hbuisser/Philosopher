@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/21 13:51:20 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 12:52:23 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void *routine_time(void *arg)
 	t_data *values;
 	long int diff;
 	int i;
+	long int time;
 
 	values = get_struct();
 	while(values->status == -1)
@@ -57,7 +58,9 @@ void *routine_time(void *arg)
 			if (diff > values->time_to_die)
 			{
 			 	values->status = 1;
-				printf("philo %d is dead ms\n", i + 1);
+				time = get_time() - values->t_start;
+				print_str_dead(i + 1, time);
+				//printf("philo %d is dead %ld ms\n", i + 1, diff);
 				lock_mutex();
 				return (0);
 			}
@@ -110,27 +113,21 @@ void *routine(void *arg)
 	int fork;
 	int next_fork;
 	int i;
+	long int time;
 
 	values = get_struct();
-	fork = 0;
-	next_fork = 0;
 	i = *(int *)arg;
-	// if (i == 0)
-	// {
-	// 	fork = (i + 1) % values->nbr_of_philo;
-	// 	next_fork = i;
-	// }
-	// else 
-	// {
 	fork = i;
 	next_fork = (i + 1) % values->nbr_of_philo;
-	// }
 	values->last_eat[i] = get_time();
 	while (values->status == -1)
 	{
 		thinking(values, i);
 		pthread_mutex_lock(&values->mutex[fork]);
+		time = get_time() - values->t_start;
+		printf("%ld %d has taken a fork\n", time, i + 1);
 		pthread_mutex_lock(&values->mutex[next_fork]);
+		//printf("%ld %d has taken a fork\n", time, i);
 		eating(values, i);
 		pthread_mutex_unlock(&values->mutex[fork]);
 		pthread_mutex_unlock(&values->mutex[next_fork]);
