@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/22 15:51:27 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 17:49:07 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct      s_data
     pthread_t thread_time;
     pthread_mutex_t *mutex;
 	pthread_mutex_t global_mutex;
+	pthread_mutex_t dead_mutex;
     long int *last_eat;
     long int t_start;
     int status;
@@ -43,6 +44,7 @@ typedef struct      s_data
 */
 
 int philo_one(t_data *values);
+int destroy_mutex(t_data *values);
 
 /*
 *** Utils
@@ -55,8 +57,9 @@ t_data *get_struct(void);
 int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
 int complete_values(t_data *values);
-long    get_time(void);
+long get_time(void);
 void print_str_dead(int i, long int diff);
+void print_str_fork(int i, long int diff);
 void print_str(long int t, int phi, char *mess);
 void my_sleep(long int time);
 
