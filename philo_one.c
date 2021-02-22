@@ -5,91 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 19:30:10 by hbuisser         ###   ########.fr       */
+/*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
+/*   Updated: 2021/02/22 20:57:00 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-int destroy_mutex(t_data *values)
+void	*routine_time(void *arg)
 {
-	int i;
-
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
-		pthread_mutex_unlock(&values->mutex[i]);	
-		pthread_mutex_destroy(&values->mutex[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&values->global_mutex);
-	return (0);
-}
-
-// void unlock_mutex()
-// {
-// 	int i;
-// 	t_data *values;
-
-// 	values = get_struct();
-// 	pthread_mutex_unlock(&values->global_mutex);
-// 	i = 0;
-// 	while (i < values->nbr_of_philo)
-// 	{
-// 		pthread_mutex_unlock(&values->mutex[i]);
-// 		i++;
-// 	}
-// }
-
-int check_count_eat()
-{
-	int i;
-	t_data *values;
+	t_data		*values;
+	int			i;
 
 	values = get_struct();
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
-		if (values->count_eat[i] == values->nbr_of_time_each_philo_must_eat)
-			values->has_eat[i] = 1;
-		i++;
-	}
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
-		if (values->has_eat[i] == 0)
-			return (-1);
-		i++;
-	}
-	return (1);
-}
-
-void *routine_time(void *arg)
-{
-	t_data *values;
-	long int diff;
-	int i;
-	long int time;
-
-	values = get_struct();
-	usleep(400);
-	while(values->status == -1)
+	while (values->status == -1)
 	{
 		i = -1;
 		while (++i < values->nbr_of_philo)
 		{
-			diff = get_time() - values->last_eat[i];
-			if (diff > values->time_to_die)
+			if ((get_time() - values->last_eat[i]) > values->time_to_die)
 			{
-			 	values->status = 1;
-				time = get_time() - values->t_start;
-				//unlock_mutex();
-				print_str_dead(i + 1, time);
+				values->status = 1;
+				print_str_dead(i + 1, (get_time() - values->t_start));
 				return (0);
 			}
 		}
-		if (values->nbr_of_time_each_philo_must_eat > 0 && check_count_eat() > 0)
+		if (check_count_eat() > 0)
 		{
 			pthread_mutex_lock(&values->global_mutex);
 			values->status = 1;
@@ -100,10 +41,10 @@ void *routine_time(void *arg)
 	return (arg);
 }
 
-int thinking(t_data *values, int i)
+int		thinking(t_data *values, int i)
 {
-	long int time;
-	char *mess;
+	long int	time;
+	char		*mess;
 
 	mess = ft_strdup(" is thinking\n");
 	time = get_time() - values->t_start;
@@ -112,10 +53,10 @@ int thinking(t_data *values, int i)
 	return (0);
 }
 
-int sleeping(t_data *values, int i)
+int		sleeping(t_data *values, int i)
 {
-	long int time;
-	char *mess;
+	long int	time;
+	char		*mess;
 
 	time = get_time() - values->t_start;
 	mess = ft_strdup(" is sleeping\n");
@@ -127,10 +68,10 @@ int sleeping(t_data *values, int i)
 	return (0);
 }
 
-int eating(t_data *values, int i)
+int		eating(t_data *values, int i)
 {
-	long int time;
-	char *mess;
+	long int	time;
+	char		*mess;
 
 	values->count_eat[i] += 1;
 	mess = ft_strdup(" is eating\n");
@@ -144,16 +85,13 @@ int eating(t_data *values, int i)
 	return (0);
 }
 
-void *routine(void *arg)
+void	*routine(void *arg)
 {
-	t_data *values;
-	int fork;
-	int next_fork;
-	int i;
-	long int time;
-	char *mess;
+	t_data		*values;
+	int			fork;
+	int			next_fork;
+	int			i;
 
-	mess = ft_strdup(" has taken a fork\n");
 	values = get_struct();
 	i = *(int *)arg;
 	fork = i;
@@ -168,70 +106,12 @@ void *routine(void *arg)
 	{
 		thinking(values, i);
 		pthread_mutex_lock(&values->mutex[fork]);
-		time = get_time() - values->t_start;
-		print_str_fork(i + 1, time);
+		print_str_fork(i + 1);
 		pthread_mutex_lock(&values->mutex[next_fork]);
 		eating(values, i);
 		pthread_mutex_unlock(&values->mutex[fork]);
 		pthread_mutex_unlock(&values->mutex[next_fork]);
 		sleeping(values, i);
 	}
-	return (arg);
-}
-
-int init_and_malloc_mutex_and_thread(t_data *values)
-{
-	int i;
-
-	values->mutex = malloc(sizeof(pthread_mutex_t) * values->nbr_of_philo);
-	memset(values->mutex, 0, values->nbr_of_philo * 8);
-	values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
-	memset(values->thread, 0, values->nbr_of_philo * 8);
-	pthread_mutex_init(&values->global_mutex, NULL);
-	pthread_mutex_init(&values->dead_mutex, NULL);
-	pthread_mutex_lock(&values->dead_mutex);
-	i = -1;
-	while (++i < values->nbr_of_philo)
-		pthread_mutex_init(&values->mutex[i], NULL);
-	return (0);
-}
-
-int philo_in_action(t_data *values)
-{
-	int i;
-	int *status;
-
-	status = NULL;
-	init_and_malloc_mutex_and_thread(values);
-	i = -1;
-	while (++i < values->nbr_of_philo)
-		pthread_create(&values->thread[i], NULL, &routine, &values->iter[i]);
-	pthread_create(&values->thread_time, NULL, &routine_time, NULL);
-	// i = -1;
-	// while (++i < values->nbr_of_philo)
-	// 	pthread_join(values->thread[i], (void *)&status);
-	// pthread_join(values->thread_time, (void *)&status);
-	pthread_mutex_lock(&values->dead_mutex);
-	//destroy_mutex(values);
-	return (0);
-}
-
-int main(int argc, char **argv) 
-{
-	t_data *values;
-	int i;
-
-	i = 0;
-	values = get_struct();
-	if (error_arg(argc, argv))
-		return (0);
-	if (init_struct(values))
-		return (0);
-	if (parse_values(values, argc, argv))
-		return (0);
-	if (complete_values(values))
-		return (0);
-	philo_in_action(values);
-	//free_all(values);
 	return (0);
 }

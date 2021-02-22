@@ -6,13 +6,13 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/18 13:14:58 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:43:09 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int error_arg(int argc, char **argv)
+int	error_arg(int argc, char **argv)
 {
 	int i;
 

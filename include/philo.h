@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/22 18:51:20 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:47:30 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ typedef struct      s_data
 *** Philo_one
 */
 
-int philo_one(t_data *values);
-int destroy_mutex(t_data *values);
+void *routine(void *arg);
+void *routine_time(void *arg);
+int check_count_eat(void);
+t_data *get_struct(void);
 
 /*
 *** Utils
@@ -54,13 +56,12 @@ int destroy_mutex(t_data *values);
 int print_array(t_data *values);
 int	ft_atoi(const char *str);
 int only_digit(char *str);
-t_data *get_struct(void);
 int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
 int complete_values(t_data *values);
 long get_time(void);
 void print_str_dead(int i, long int diff);
-void print_str_fork(int i, long int diff);
+void print_str_fork(int i);
 void print_str(long int t, int phi, char *mess);
 void my_sleep(long int time);
 
@@ -78,8 +79,8 @@ int check_time(t_data *values);
 *** Libft
 */
 
-char		*ft_itoa(int n);
-int			ft_atoi(const char *str);
+char	*ft_itoa(int n);
+int		ft_atoi(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
