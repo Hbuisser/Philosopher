@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 15:35:18 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 16:24:46 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ int destroy_mutex(t_data *values)
 {
 	int i;
 
+	//pthread_mutex_unlock(&values->global_mutex);
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
-		pthread_mutex_unlock(&values->mutex[i]);
+		pthread_mutex_unlock(&values->mutex[i]);	
 		pthread_mutex_destroy(&values->mutex[i]);
 		i++;
 	}
@@ -35,7 +36,22 @@ void lock_mutex()
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
+		//pthread_mutex_unlock(&values->mutex[i]);	
 		pthread_mutex_lock(&values->mutex[i]);
+		i++;
+	}
+}
+
+void unlock_mutex()
+{
+	int i;
+	t_data *values;
+
+	values = get_struct();
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		pthread_mutex_unlock(&values->mutex[i]);
 		i++;
 	}
 }
@@ -51,19 +67,19 @@ void *routine_time(void *arg)
 	usleep(400);
 	while(values->status == -1)
 	{
-		i = 0;
-		while (i < values->nbr_of_philo)
+		i = -1;
+		while (++i < values->nbr_of_philo)
 		{
 			diff = get_time() - values->last_eat[i];
 			if (diff > values->time_to_die)
 			{
 			 	values->status = 1;
 				time = get_time() - values->t_start;
+				unlock_mutex();
+				//lock_mutex();
 				print_str_dead(i + 1, time);
-				lock_mutex();
 				return (0);
 			}
-			i++;
 		}
 		usleep(3600);
 	}
@@ -78,8 +94,8 @@ int thinking(t_data *values, int i)
 	mess = ft_strdup(" is thinking\n");
 	time = get_time() - values->t_start;
 	if (values->status == -1)
-		printf("%ld %d is thinking\n", time, i + 1);
-		//print_str(time, i + 1, mess);
+		//printf("%ld %d is thinking\n", time, i + 1);
+		print_str(time, i + 1, mess);
 	return (0);
 }
 
@@ -91,7 +107,6 @@ int sleeping(t_data *values, int i)
 	if (values->status == -1)
 	{
 		printf("%ld %d is sleeping\n", time, i + 1);
-		//usleep(values->time_to_sleep * 1000);
 		my_sleep(values->time_to_sleep);
 	}
 	return (0);
@@ -106,7 +121,6 @@ int eating(t_data *values, int i)
 	{
 		printf("%ld %d is eating\n", time, i + 1);
 		values->last_eat[i] = get_time();
-		//usleep(values->time_to_eat * 1000);
 		my_sleep(values->time_to_eat);
 	}
 	return (0);
@@ -149,18 +163,14 @@ int init_and_malloc_mutex_and_thread(t_data *values)
 {
 	int i;
 
-	i = 0;
 	values->mutex = malloc(sizeof(pthread_mutex_t) * values->nbr_of_philo);
 	memset(values->mutex, 0, values->nbr_of_philo * 8);
-	//values->t_mutex = malloc(sizeof(pthread_mutex_t));
-	//values->t_mutex = 0;
 	values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
 	memset(values->thread, 0, values->nbr_of_philo * 8);
-	while (i < values->nbr_of_philo)
-	{
+	//pthread_mutex_init(&values->global_mutex, NULL);
+	i = -1;
+	while (++i < values->nbr_of_philo)
 		pthread_mutex_init(&values->mutex[i], NULL);
-		i++;
-	}
 	return (0);
 }
 
@@ -170,8 +180,8 @@ int philo_in_action(t_data *values)
 	int *status;
 
 	status = NULL;
-	//values->t_start = get_time();
 	init_and_malloc_mutex_and_thread(values);
+	//pthread_mutex_lock(&values->global_mutex);
 	i = -1;
 	while (++i < values->nbr_of_philo)
 		pthread_create(&values->thread[i], NULL, &routine, &values->iter[i]);

@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/22 14:43:43 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 15:51:27 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct      s_data
     pthread_t *thread;
     pthread_t thread_time;
     pthread_mutex_t *mutex;
-	pthread_mutex_t t_mutex;
+	pthread_mutex_t global_mutex;
     long int *last_eat;
     long int t_start;
     int status;

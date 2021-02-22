@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 15:22:24 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 16:24:06 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void print_str_dead(int i, long int diff)
 	str = ft_strjoin(time, " ");
 	str = ft_strjoin(str, philo);
 	str = ft_strjoin(str, mess);
+	usleep(100);
 	write(1, str, ft_strlen(str));
 	free(str);
 }
@@ -108,10 +109,10 @@ int complete_values(t_data *values)
 {
 	int i;
 
-	i = -1;
 	values->t_start = get_time();
 	if (!(values->iter = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);
+	i = -1;
 	while (++i < values->nbr_of_philo)
 		values->iter[i] = i;
 	i = -1;
