@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 17:55:31 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 19:30:10 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,46 @@ int destroy_mutex(t_data *values)
 		pthread_mutex_destroy(&values->mutex[i]);
 		i++;
 	}
-	//pthread_mutex_unlock(&values->global_mutex);
 	pthread_mutex_destroy(&values->global_mutex);
 	return (0);
 }
 
-void unlock_mutex()
+// void unlock_mutex()
+// {
+// 	int i;
+// 	t_data *values;
+
+// 	values = get_struct();
+// 	pthread_mutex_unlock(&values->global_mutex);
+// 	i = 0;
+// 	while (i < values->nbr_of_philo)
+// 	{
+// 		pthread_mutex_unlock(&values->mutex[i]);
+// 		i++;
+// 	}
+// }
+
+int check_count_eat()
 {
 	int i;
 	t_data *values;
 
 	values = get_struct();
-	pthread_mutex_unlock(&values->global_mutex);
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
-		pthread_mutex_unlock(&values->mutex[i]);
+		if (values->count_eat[i] == values->nbr_of_time_each_philo_must_eat)
+			values->has_eat[i] = 1;
 		i++;
 	}
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		if (values->has_eat[i] == 0)
+			return (-1);
+		i++;
+	}
+	return (1);
 }
 
 void *routine_time(void *arg)
@@ -66,6 +88,12 @@ void *routine_time(void *arg)
 				print_str_dead(i + 1, time);
 				return (0);
 			}
+		}
+		if (values->nbr_of_time_each_philo_must_eat > 0 && check_count_eat() > 0)
+		{
+			pthread_mutex_lock(&values->global_mutex);
+			values->status = 1;
+			pthread_mutex_unlock(&values->dead_mutex);
 		}
 		usleep(3600);
 	}
@@ -104,6 +132,7 @@ int eating(t_data *values, int i)
 	long int time;
 	char *mess;
 
+	values->count_eat[i] += 1;
 	mess = ft_strdup(" is eating\n");
 	time = get_time() - values->t_start;
 	if (values->status == -1)
@@ -141,7 +170,6 @@ void *routine(void *arg)
 		pthread_mutex_lock(&values->mutex[fork]);
 		time = get_time() - values->t_start;
 		print_str_fork(i + 1, time);
-		//print_str(i + 1, time, mess);
 		pthread_mutex_lock(&values->mutex[next_fork]);
 		eating(values, i);
 		pthread_mutex_unlock(&values->mutex[fork]);
@@ -184,7 +212,7 @@ int philo_in_action(t_data *values)
 	// 	pthread_join(values->thread[i], (void *)&status);
 	// pthread_join(values->thread_time, (void *)&status);
 	pthread_mutex_lock(&values->dead_mutex);
-	destroy_mutex(values);
+	//destroy_mutex(values);
 	return (0);
 }
 

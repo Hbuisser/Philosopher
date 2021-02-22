@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/22 17:49:07 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 18:51:20 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef struct      s_data
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	nbr_of_time_each_philo_must_eat;
-    int *philo_num;
+	int *count_eat;
+	int *has_eat;
     int *iter;
     pthread_t *thread;
     pthread_t thread_time;

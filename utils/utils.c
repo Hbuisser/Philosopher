@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 17:55:46 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 19:17:57 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,18 +131,20 @@ int complete_values(t_data *values)
 	while (++i < values->nbr_of_philo)
 		values->iter[i] = i;
 	i = -1;
-	if (!(values->philo_num = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+	if (!(values->count_eat = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);
 	while (++i < values->nbr_of_philo)
-		values->philo_num[i] = i + 1;
+		values->count_eat[i] = 0;
+	i = -1;
+	if (!(values->has_eat = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
+	while (++i < values->nbr_of_philo)
+		values->has_eat[i] = 0;
 	i = -1;
 	if (!(values->last_eat = (long int *)malloc(sizeof(long int) * values->nbr_of_philo)))
 		return (1);
 	while (++i < values->nbr_of_philo)
 		values->last_eat[i] = 0;
-	i = -1;
-	while (++i < values->nbr_of_philo)
-		values->philo_num[i] = i;
 	return (0);
 }
 
@@ -163,7 +165,7 @@ int parse_values(t_data *values, int argc, char **argv)
 	if (argc == 6)
 		values->nbr_of_time_each_philo_must_eat = ft_atoi(argv[5]);
 	else
-		values->nbr_of_time_each_philo_must_eat = 1;
+		values->nbr_of_time_each_philo_must_eat = 0;
 	return (0);
 }
 
