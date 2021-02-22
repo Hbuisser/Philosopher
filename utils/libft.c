@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 12:36:00 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 13:51:08 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,4 +147,61 @@ size_t	ft_strlen(const char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	int		i;
+	int		j;
+	char	*dest;
+
+	if (s2 == NULL || s1 == NULL)
+		return (NULL);
+	if (!(dest = malloc((ft_strlen((char*)s1) +
+		ft_strlen((char*)s2)) * sizeof(char*))))
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		dest[i + j] = s2[j];
+		j++;
+	}
+	dest[i + j] = '\0';
+	free(s1);
+	return (dest);
+}
+
+char	*ft_strjoin_free_all(char *s1, char *s2)
+{
+	int		i;
+	int		j;
+	char	*dest;
+
+	if (s2 == NULL || s1 == NULL)
+		return (NULL);
+	if (!(dest = (char *)malloc((ft_strlen((char*)s1) +
+		ft_strlen((char*)s2)) * sizeof(char*))))
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		dest[i + j] = s2[j];
+		j++;
+	}
+	dest[i + j] = '\0';
+	free(s1);
+	free(s2);
+	return (dest);
 }

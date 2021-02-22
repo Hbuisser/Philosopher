@@ -6,22 +6,44 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 12:48:30 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 15:22:24 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-// char *print_str(long int t, int ph, )
-// {
-// 	char *time;
-// 	char *philo;
+void my_sleep(long int time)
+{
+	long int i;
+	long int t;
 
-// 	time = ft_itoa()
-// 	return (str);
-// }
+	i = 0;
+	t = get_time();
+	while(i < (time * 20))
+	{
+		i++;
+		if ((get_time() - t) >= time)
+			break ;
+		usleep(50);
+	}
+}
 
-char *print_str_dead(int i, long int diff)
+void print_str(long int t, int phi, char *mess)
+{
+	char *time;
+	char *philo;
+	char *str;
+
+	time = ft_itoa((int)t);
+	philo = ft_itoa(phi);
+	str = ft_strjoin_free(time, " ");
+	str = ft_strjoin_free_all(str, philo);
+	str = ft_strjoin_free_all(str, mess);
+	write(1, str, ft_strlen(str));
+	free(str);
+}
+
+void print_str_dead(int i, long int diff)
 {
 	char *philo;
 	char *time;
@@ -36,7 +58,6 @@ char *print_str_dead(int i, long int diff)
 	str = ft_strjoin(str, mess);
 	write(1, str, ft_strlen(str));
 	free(str);
-	return (str);
 }
 
 long    get_time(void)
@@ -50,18 +71,18 @@ long    get_time(void)
     return (milliseconds);
 }
 
-int print_array(t_data *values)
-{
-	int j;
+// int print_array(t_data *values)
+// {
+// 	int j;
 
-	j = 0;
-	while (j < values->nbr_of_philo)
-	{
-		printf("int: |%ld|\n", values->last_eat[j]);
-		j++;
-	}
-	return(0);
-}
+// 	j = 0;
+// 	while (j < values->nbr_of_philo)
+// 	{
+// 		printf("int: |%ld|\n", values->last_eat[j]);
+// 		j++;
+// 	}
+// 	return(0);
+// }
 
 int only_digit(char *str)
 {
@@ -83,30 +104,12 @@ t_data *get_struct(void)
 	return (&values);
 }
 
-int check_time(t_data *values)
-{
-	int time_eat_sleep;
-
-	time_eat_sleep = values->time_to_eat + values->time_to_sleep;
-	if (values->time_to_die < values->time_to_eat ||
-		values->time_to_die < values->time_to_sleep)
-	{
-		write(2, "Not enough time to die\n", 23);
-		return (1);
-	}
-	if (values->time_to_die < time_eat_sleep)
-	{
-		write(2, "Not enough time to die\n", 23);
-		return (1);
-	}
-	return (0);
-}
-
 int complete_values(t_data *values)
 {
 	int i;
 
 	i = -1;
+	values->t_start = get_time();
 	if (!(values->iter = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);
 	while (++i < values->nbr_of_philo)

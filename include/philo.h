@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/22 12:36:08 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/22 14:43:43 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ typedef struct      s_data
     int *philo_num;
     int *iter;
     pthread_t *thread;
-    pthread_t time;
+    pthread_t thread_time;
     pthread_mutex_t *mutex;
+	pthread_mutex_t t_mutex;
     long int *last_eat;
     long int t_start;
     int status;
@@ -55,7 +56,9 @@ int init_struct(t_data *values);
 int parse_values(t_data *values, int argc, char **argv);
 int complete_values(t_data *values);
 long    get_time(void);
-char *print_str_dead(int i, long int diff);
+void print_str_dead(int i, long int diff);
+void print_str(long int t, int phi, char *mess);
+void my_sleep(long int time);
 
 /*
 *** Errors and Free
@@ -76,5 +79,7 @@ int			ft_atoi(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
+char	*ft_strjoin_free(char *s1, char *s2);
+char	*ft_strjoin_free_all(char *s1, char *s2);
 
 #endif
