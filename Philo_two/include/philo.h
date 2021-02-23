@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/23 10:59:02 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 12:14:35 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <pthread.h>
 # include <sys/time.h>
+#include <semaphore.h>
 
 typedef struct      s_data
 {
@@ -32,10 +33,8 @@ typedef struct      s_data
 	int *has_eat;
     int *iter;
     pthread_t *thread;
-    // pthread_t thread_time;
-    // pthread_mutex_t *mutex;
-	// pthread_mutex_t global_mutex;
-	// pthread_mutex_t dead_mutex;
+    pthread_t thread_time;
+    sem_t *forks_nbr;
     long int *last_eat;
     int status;
 }                   t_data;
@@ -45,7 +44,7 @@ typedef struct      s_data
 */
 
 void *routine(void *arg);
-//void *routine_time(void *arg);
+void *routine_time(void *arg);
 //int check_count_eat(void);
 t_data *get_struct(void);
 int		eating(t_data *values, int i);
