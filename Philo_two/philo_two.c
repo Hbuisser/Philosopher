@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 13:47:20 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 19:12:28 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	*routine_time(void *arg)
 				return (0);
 			}
 		}
-		// if (check_count_eat() > 0)
-		// {
-		// 	// pthread_mutex_lock(&values->global_mutex);
-		// 	values->status = 1;
-		// 	// pthread_mutex_unlock(&values->dead_mutex);
-		// }
-		usleep(3600);
+		if (check_count_eat() > 0)
+		{
+			sem_wait(values->sem_global);
+			values->status = 1;
+			sem_post(values->sem_dead);
+		}
+		usleep(4000);
 	}
 	return (arg);
 }
@@ -80,8 +80,8 @@ int		eating(t_data *values, int i)
 	time = get_time() - values->t_start;
 	if (values->status == -1)
 	{
-		print_str(time, i + 1, mess);
 		values->last_eat[i] = get_time();
+		print_str(time, i + 1, mess);
 		my_sleep(values->time_to_eat);
 	}
 	return (0);
@@ -98,14 +98,12 @@ void	*routine(void *arg)
 	while (values->status == -1)
 	{
 		thinking(values, i);
-		//sem_post(values->sem_forks);
+        sem_wait(values->sem_forks);
         sem_wait(values->sem_forks);
 		print_str_fork(i + 1);
-		//sem_post(values->sem_forks);
-        sem_wait(values->sem_forks);
 		eating(values, i);
-        //sem_post(values->sem_forks);
-        //sem_post(values->sem_forks);
+        sem_post(values->sem_forks);
+        sem_post(values->sem_forks);
 		sleeping(values, i);
 	}
 	return (0);

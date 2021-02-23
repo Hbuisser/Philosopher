@@ -6,13 +6,13 @@
 #    By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/25 20:05:16 by hbuisser          #+#    #+#              #
-#    Updated: 2021/02/23 12:07:16 by hbuisser         ###   ########.fr        #
+#    Updated: 2021/02/23 17:43:12 by hbuisser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = main.c \
 		philo_two.c \
-		utils/errors_and_init.c \
+		utils/errors_init_and_free.c \
 		utils/parse.c \
 		utils/print.c \
 		utils/utils.c \
@@ -23,7 +23,7 @@ OBJS = $(SRCS:%.c=%.o)
 
 NAME = Philo_two
 
-CFLAGS = -g -Wall -Wextra -Werror -pthread
+CFLAGS = -g -Wall -Wextra -Werror -pthread 
 
 all:		$(NAME)
 

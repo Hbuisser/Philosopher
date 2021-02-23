@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/23 12:32:30 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 17:13:23 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct      s_data
 
 void *routine(void *arg);
 void *routine_time(void *arg);
-//int check_count_eat(void);
 t_data *get_struct(void);
 int		eating(t_data *values, int i);
 int		sleeping(t_data *values, int i);
@@ -57,6 +56,7 @@ int		thinking(t_data *values, int i);
 *** Utils
 */
 
+int check_count_eat(void);
 int only_digit(char *str);
 int parse_values(t_data *values, int argc, char **argv);
 int complete_values(t_data *values);
@@ -73,11 +73,12 @@ void print_str_fork(int i);
 void print_str(long int t, int phi, char *mess);
 
 /*
-*** Errors and init
+*** Errors, init and free
 */
 
 int error_arg(int argc, char **argv);
 int init_struct(t_data *values);
+int free_all(t_data *values);
 
 /*
 *** Libft

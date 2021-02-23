@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors_and_init.c                                  :+:      :+:    :+:   */
+/*   errors_init_and_free.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 10:36:18 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 17:13:04 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,17 @@ int		init_struct(t_data *values)
 	values->nbr_of_time_each_philo_must_eat = 0;
 	values->t_start = 0;
 	values->status = -1;
+	return (0);
+}
+
+int		free_all(t_data *values)
+{
+    int i;
+
+	i = 0;
+	free(values->count_eat);
+	free(values->has_eat);
+	free(values->iter);
+	free(values->last_eat);
 	return (0);
 }
