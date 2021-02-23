@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 10:54:59 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 14:28:37 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ void	print_str(long int t, int phi, char *mess)
 	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
+	//sem_wait(values->sem_global);
 	//pthread_mutex_lock(&values->global_mutex);
 	write(1, str, ft_strlen(str));
 	free(str);
+	//sem_post(values->sem_global);
 	//pthread_mutex_unlock(&values->global_mutex);
 }
 
@@ -47,8 +49,10 @@ void	print_str_fork(int i)
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
 	//pthread_mutex_lock(&values->global_mutex);
+	//sem_wait(values->sem_global);
 	write(1, str, ft_strlen(str));
 	free(str);
+	//sem_post(values->sem_global);
 	//pthread_mutex_unlock(&values->global_mutex);
 }
 
@@ -68,6 +72,8 @@ void	print_str_dead(int i, long int diff)
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
 	//pthread_mutex_lock(&values->global_mutex);
+	sem_wait(values->sem_dead);
+	//sem_post(values->sem_forks);
 	write(1, str, ft_strlen(str));
 	free(str);
 	//pthread_mutex_unlock(&values->dead_mutex);

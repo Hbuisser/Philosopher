@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/23 12:14:35 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 12:32:30 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ typedef struct      s_data
     int *iter;
     pthread_t *thread;
     pthread_t thread_time;
-    sem_t *forks_nbr;
+    sem_t *sem_forks;
+    sem_t *sem_global;
+    sem_t *sem_dead;
     long int *last_eat;
     int status;
 }                   t_data;
