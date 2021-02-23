@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 20:57:15 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 15:37:29 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ int		main(int argc, char **argv)
 		return (0);
 	values->t_start = get_time();
 	philo_in_action(values);
+	free_all(values);
 	return (0);
 }

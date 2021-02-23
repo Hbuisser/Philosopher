@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 19:12:28 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 19:43:42 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ void	*routine(void *arg)
 	while (values->status == -1)
 	{
 		thinking(values, i);
-        sem_wait(values->sem_forks);
-        sem_wait(values->sem_forks);
+		sem_wait(values->sem_forks);
+		sem_wait(values->sem_forks);
 		print_str_fork(i + 1);
 		eating(values, i);
-        sem_post(values->sem_forks);
-        sem_post(values->sem_forks);
+		sem_post(values->sem_forks);
+		sem_post(values->sem_forks);
 		sleeping(values, i);
 	}
 	return (0);

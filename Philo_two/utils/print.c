@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 18:38:29 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 19:41:35 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	print_str_fork(int i)
 	time = ft_itoa((int)(get_time() - values->t_start));
 	mess = ft_strdup(" has taken a fork\n");
 	philo = ft_itoa(i);
-	str = ft_strjoin(time, " ");
+	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
 	sem_wait(values->sem_global);
@@ -64,7 +64,7 @@ void	print_str_dead(int i, long int diff)
 	mess = ft_strdup(" died\n");
 	philo = ft_itoa(i);
 	time = ft_itoa((int)diff);
-	str = ft_strjoin(time, " ");
+	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
 	sem_wait(values->sem_global);

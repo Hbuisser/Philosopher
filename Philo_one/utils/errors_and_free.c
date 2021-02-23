@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   errors_and_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/22 20:43:09 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 19:56:28 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,17 @@ int	error_arg(int argc, char **argv)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	free_all(t_data *values)
+{
+	int i;
+
+	i = 0;
+	free(values->count_eat);
+	free(values->has_eat);
+	free(values->iter);
+	free(values->last_eat);
 	return (0);
 }

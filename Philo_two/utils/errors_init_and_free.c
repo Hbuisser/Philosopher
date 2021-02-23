@@ -6,13 +6,13 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 17:13:04 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 19:44:55 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int	error_arg(int argc, char **argv)
+int		error_arg(int argc, char **argv)
 {
 	int i;
 
@@ -53,7 +53,7 @@ int		init_struct(t_data *values)
 
 int		free_all(t_data *values)
 {
-    int i;
+	int i;
 
 	i = 0;
 	free(values->count_eat);

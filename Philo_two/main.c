@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 19:04:01 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/23 19:44:00 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int		init_thread_and_sem(t_data *values)
 	values->sem_dead = sem_open("sem_dead", O_CREAT, 0660, 1);
 	if (values->sem_dead == SEM_FAILED)
 		return (1);
-	values->sem_forks = sem_open("sem_forks", O_CREAT, 0660, values->nbr_of_philo);
+	values->sem_forks = sem_open("sem_forks", O_CREAT, 0660,
+		values->nbr_of_philo);
 	if (values->sem_forks == SEM_FAILED)
 		return (1);
 	values->sem_global = sem_open("sem_global", O_CREAT, 0660, 1);
@@ -44,23 +45,14 @@ int		philo_in_action(t_data *values)
 	while (++i < values->nbr_of_philo)
 		pthread_create(&values->thread[i], NULL, &routine, &values->iter[i]);
 	pthread_create(&values->thread_time, NULL, &routine_time, NULL);
-	
-	// i = -1;
-	// while (++i < values->nbr_of_philo)
-	// 	pthread_join(values->thread[i], NULL);
-	// pthread_join(values->thread_time, NULL);
-	
 	sem_wait(values->sem_dead);
-
-    sem_close(values->sem_forks);
-	sem_close(values->sem_global);
-	sem_close(values->sem_dead);
 	return (0);
 }
 
-t_data *get_struct(void)
+t_data	*get_struct(void)
 {
 	static t_data values;
+
 	return (&values);
 }
 
