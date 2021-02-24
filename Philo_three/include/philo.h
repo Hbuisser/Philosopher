@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/23 19:49:25 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/24 20:38:29 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,27 @@ typedef struct	s_data
 	int			*count_eat;
 	int			*has_eat;
 	int			*iter;
-	pthread_t	*thread;
+	pthread_t	thread;
 	pthread_t	thread_time;
 	sem_t		*sem_forks;
 	sem_t		*sem_global;
 	sem_t		*sem_dead;
-	long int	*last_eat;
+	long int	last_eat;
 	int			status;
+	int 		*pid;
+	int 		philo;
 }				t_data;
 
 /*
 *** Philo_two and main
 */
 
-void			*routine(void *arg);
+void			routine(t_data *values);
 void			*routine_time(void *arg);
 t_data			*get_struct(void);
-int				eating(t_data *values, int i);
-int				sleeping(t_data *values, int i);
-int				thinking(t_data *values, int i);
+int				eating(t_data *values);
+int				sleeping(t_data *values);
+int				thinking(t_data *values);
 
 /*
 *** Utils

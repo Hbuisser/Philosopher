@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 19:44:55 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/24 19:48:15 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int		init_struct(t_data *values)
 	values->nbr_of_time_each_philo_must_eat = 0;
 	values->t_start = 0;
 	values->status = -1;
+	values->last_eat = 0;
+	values->philo = 0;
 	return (0);
 }
 
@@ -59,6 +61,5 @@ int		free_all(t_data *values)
 	free(values->count_eat);
 	free(values->has_eat);
 	free(values->iter);
-	free(values->last_eat);
 	return (0);
 }
