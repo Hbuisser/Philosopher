@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 11:51:09 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 17:15:53 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ int		init_thread_and_sem(t_data *values)
 	sem_unlink("sem_forks");
 	sem_unlink("sem_global");
 	sem_unlink("sem_dead");
+	values->sem_eat = sem_open("sem_eat", O_CREAT, 0660,
+		values->nbr_of_philo);
+	if (values->sem_eat == SEM_FAILED)
+		return (1);
 	values->sem_dead = sem_open("sem_dead", O_CREAT, 0660, 1);
 	if (values->sem_dead == SEM_FAILED)
 		return (1);
@@ -48,11 +52,10 @@ int		philo_in_action(t_data *values)
 		{
 			pthread_create(&values->thread_time, NULL, &routine_time, NULL);
 			routine(values);
-			//pthread_create(&values->thread, NULL, &routine, NULL);
-			//exit(0);
 		}
 		i++;
 	}
+	//sem_wait(values->sem_eat);
 	sem_wait(values->sem_dead);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 10:52:23 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 15:05:57 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,13 @@ int		check_count_eat(void)
 	t_data	*values;
 
 	values = get_struct();
-	if (values->count_eat == values->nbr_of_time_each_philo_must_eat)
-		values->has_eat[values->philo - 1] = 1;
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		if (values->count_eat[i] == values->nbr_of_time_each_philo_must_eat)
+			values->has_eat[i] = 1;
+		i++;
+	}
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{

@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 11:36:32 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 12:41:51 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,6 @@ int		init_struct(t_data *values)
 
 int		free_all(t_data *values)
 {
-	int i;
-
-	i = 0;
 	free(values->has_eat);
-	free(values->iter);
 	return (0);
 }

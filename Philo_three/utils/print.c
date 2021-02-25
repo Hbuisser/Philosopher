@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 19:41:35 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 17:10:46 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,5 @@ void	print_str_dead(int i, long int diff)
 	write(1, str, ft_strlen(str));
 	free(str);
 	sem_post(values->sem_dead);
+	//sem_post(values->sem_eat);
 }

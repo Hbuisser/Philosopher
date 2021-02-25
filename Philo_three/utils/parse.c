@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 10:40:56 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 17:08:02 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int		complete_values(t_data *values)
 {
 	int	i;
 
-	if (!(values->iter = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
-		return (1);
 	i = -1;
+	if (!(values->count_eat = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+		return (1);
 	while (++i < values->nbr_of_philo)
-		values->iter[i] = i;
+		values->count_eat[i] = 0;
 	i = -1;
 	if (!(values->has_eat = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
 		return (1);

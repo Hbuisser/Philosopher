@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 11:49:57 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 17:13:55 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	*routine_time(void *arg)
 	values = get_struct();
 	while (values->status == -1)
 	{
-		//printf("coucu\n");
 		if ((get_time() - values->last_eat) > values->time_to_die)
 		{
 			values->status = 1;
@@ -69,16 +68,20 @@ int		eating(t_data *values)
 	long int	time;
 	char		*mess;
 
-	values->count_eat += 1;
 	mess = ft_strdup(" is eating\n");
 	time = get_time() - values->t_start;
 	if (values->status == -1)
 	{
 		values->last_eat = get_time();
 		print_str(time, values->philo, mess);
+		values->count_eat[values->philo - 1] += 1;
+		if (values->nbr_of_time_each_philo_must_eat > 0 &&
+			(values->count_eat[values->philo - 1] == 
+			values->nbr_of_time_each_philo_must_eat))
+			return (-1);
 		my_sleep(values->time_to_eat);
 	}
-	return (0);
+	return (1);
 }
 
 void	routine(t_data *values)
@@ -90,29 +93,14 @@ void	routine(t_data *values)
 		sem_wait(values->sem_forks);
 		sem_wait(values->sem_forks);
 		print_str_fork(values->philo);
-		eating(values);
+		if (eating(values) < 0)
+		{
+			//sem_wait(values->sem_global);
+			values->status = 1;
+			sem_wait(values->sem_eat);
+		}
 		sem_post(values->sem_forks);
 		sem_post(values->sem_forks);
 		sleeping(values);
 	}
 }
-
-// void	*routine(void *arg)
-// {
-// 	t_data *values;
-
-// 	values = get_struct();
-// 	values->last_eat = get_time();
-// 	while (values->status == -1)
-// 	{
-// 		thinking(values);
-// 		sem_wait(values->sem_forks);
-// 		sem_wait(values->sem_forks);
-// 		print_str_fork(values->philo);
-// 		eating(values);
-// 		sem_post(values->sem_forks);
-// 		sem_post(values->sem_forks);
-// 		sleeping(values);
-// 	}
-// 	return (arg);
-// }

@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 09:16:31 by mvan-eyn          #+#    #+#             */
-/*   Updated: 2021/02/25 11:48:49 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 17:09:48 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <semaphore.h>
+#include <signal.h>
 
 typedef struct	s_data
 {
@@ -29,14 +30,15 @@ typedef struct	s_data
 	int			time_to_sleep;
 	int			nbr_of_time_each_philo_must_eat;
 	long int	t_start;
-	int			count_eat;
+	int			*count_eat;
 	int			*has_eat;
-	int			*iter;
 	pthread_t	thread;
 	pthread_t	thread_time;
+	pthread_t 	thread_nbr_eat;
 	sem_t		*sem_forks;
 	sem_t		*sem_global;
-	sem_t		*sem_dead;
+	sem_t 		*sem_dead;
+	sem_t		*sem_eat;
 	long int	last_eat;
 	int			status;
 	int 		*pid;
@@ -48,8 +50,8 @@ typedef struct	s_data
 */
 
 void			routine(t_data *values);
-//void			*routine(void *arg);
 void			*routine_time(void *arg);
+void			*routine_nbr_eat(void *arg);
 t_data			*get_struct(void);
 int				eating(t_data *values);
 int				sleeping(t_data *values);
