@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 17:13:55 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 18:21:16 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,17 @@ int		eating(t_data *values)
 	long int	time;
 	char		*mess;
 
+	values->count_eat += 1;
 	mess = ft_strdup(" is eating\n");
 	time = get_time() - values->t_start;
 	if (values->status == -1)
 	{
 		values->last_eat = get_time();
 		print_str(time, values->philo, mess);
-		values->count_eat[values->philo - 1] += 1;
 		if (values->nbr_of_time_each_philo_must_eat > 0 &&
-			(values->count_eat[values->philo - 1] == 
+			(values->count_eat ==
 			values->nbr_of_time_each_philo_must_eat))
-			return (-1);
+			sem_post(values->sem_eat);
 		my_sleep(values->time_to_eat);
 	}
 	return (1);
@@ -93,12 +93,7 @@ void	routine(t_data *values)
 		sem_wait(values->sem_forks);
 		sem_wait(values->sem_forks);
 		print_str_fork(values->philo);
-		if (eating(values) < 0)
-		{
-			//sem_wait(values->sem_global);
-			values->status = 1;
-			sem_wait(values->sem_eat);
-		}
+		eating(values);
 		sem_post(values->sem_forks);
 		sem_post(values->sem_forks);
 		sleeping(values);

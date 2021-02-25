@@ -6,43 +6,47 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 17:15:53 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 18:13:30 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-int		init_thread_and_sem(t_data *values)
+int		init_sem(t_data *values)
 {
-	sem_unlink("sem_forks");
-	sem_unlink("sem_global");
-	sem_unlink("sem_dead");
+	sem_unlink("sem_eat");
 	values->sem_eat = sem_open("sem_eat", O_CREAT, 0660,
 		values->nbr_of_philo);
 	if (values->sem_eat == SEM_FAILED)
 		return (1);
-	values->sem_dead = sem_open("sem_dead", O_CREAT, 0660, 1);
-	if (values->sem_dead == SEM_FAILED)
-		return (1);
+	// sem_unlink("sem_dead");
+	// values->sem_dead = sem_open("sem_dead", O_CREAT, 0660, 1);
+	// if (values->sem_dead == SEM_FAILED)
+	// 	return (1);
+	sem_unlink("sem_forks");
 	values->sem_forks = sem_open("sem_forks", O_CREAT, 0660,
 		values->nbr_of_philo);
 	if (values->sem_forks == SEM_FAILED)
 		return (1);
+	sem_unlink("sem_global");
 	values->sem_global = sem_open("sem_global", O_CREAT, 0660, 1);
 	if (values->sem_global == SEM_FAILED)
 		return (1);
-	sem_wait(values->sem_dead);
 	return (0);
 }
 
 int		philo_in_action(t_data *values)
 {
 	int	i;
-	int	*status;
 
-	if (init_thread_and_sem(values))
+	if (init_sem(values))
 		return (0);
-	status = NULL;
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		sem_wait(values->sem_eat);
+		i++;
+	}
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
@@ -55,8 +59,7 @@ int		philo_in_action(t_data *values)
 		}
 		i++;
 	}
-	//sem_wait(values->sem_eat);
-	sem_wait(values->sem_dead);
+	sem_wait(values->sem_eat);
 	return (0);
 }
 
