@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/24 20:38:39 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 11:49:57 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	*routine_time(void *arg)
 	values = get_struct();
 	while (values->status == -1)
 	{
+		//printf("coucu\n");
 		if ((get_time() - values->last_eat) > values->time_to_die)
 		{
 			values->status = 1;
@@ -31,7 +32,7 @@ void	*routine_time(void *arg)
 		// 	values->status = 1;
 		// 	sem_post(values->sem_dead);
 		// }
-		usleep(4000);
+		usleep(3600);
 	}
 	return (arg);
 }
@@ -68,7 +69,7 @@ int		eating(t_data *values)
 	long int	time;
 	char		*mess;
 
-	//values->count_eat[i] += 1;
+	values->count_eat += 1;
 	mess = ft_strdup(" is eating\n");
 	time = get_time() - values->t_start;
 	if (values->status == -1)
@@ -95,3 +96,23 @@ void	routine(t_data *values)
 		sleeping(values);
 	}
 }
+
+// void	*routine(void *arg)
+// {
+// 	t_data *values;
+
+// 	values = get_struct();
+// 	values->last_eat = get_time();
+// 	while (values->status == -1)
+// 	{
+// 		thinking(values);
+// 		sem_wait(values->sem_forks);
+// 		sem_wait(values->sem_forks);
+// 		print_str_fork(values->philo);
+// 		eating(values);
+// 		sem_post(values->sem_forks);
+// 		sem_post(values->sem_forks);
+// 		sleeping(values);
+// 	}
+// 	return (arg);
+// }

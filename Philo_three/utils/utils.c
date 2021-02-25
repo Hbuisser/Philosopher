@@ -6,11 +6,25 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 16:42:31 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 10:52:23 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+int		only_digit(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] > '9' || str[i] < '0')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 void	my_sleep(long int time)
 {
@@ -39,33 +53,14 @@ long	get_time(void)
 	return (milliseconds);
 }
 
-int		only_digit(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		if (str[i] > '9' || str[i] < '0')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 int		check_count_eat(void)
 {
 	int		i;
 	t_data	*values;
 
 	values = get_struct();
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
-		if (values->count_eat[i] == values->nbr_of_time_each_philo_must_eat)
-			values->has_eat[i] = 1;
-		i++;
-	}
+	if (values->count_eat == values->nbr_of_time_each_philo_must_eat)
+		values->has_eat[values->philo - 1] = 1;
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{

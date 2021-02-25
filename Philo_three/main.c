@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/24 20:36:02 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/25 11:51:09 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int		init_thread_and_sem(t_data *values)
 {
-	// values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
-	// memset(values->thread, 0, values->nbr_of_philo * 8);
 	sem_unlink("sem_forks");
 	sem_unlink("sem_global");
 	sem_unlink("sem_dead");
@@ -48,23 +46,14 @@ int		philo_in_action(t_data *values)
 		values->philo = i + 1;
 		if (values->pid[i] == 0)
 		{
-			//pthread_create(&values->thread, NULL, &routine, NULL);
-			routine(values);
 			pthread_create(&values->thread_time, NULL, &routine_time, NULL);
+			routine(values);
+			//pthread_create(&values->thread, NULL, &routine, NULL);
 			//exit(0);
 		}
-		// printf("pid: %d\n", values->pid[i]);
-		// printf("philo: %d\n", values->philo);
-		// printf("=====\n");
 		i++;
 	}
 	sem_wait(values->sem_dead);
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
-		//waitpid(values->pid[i], NULL, 0);
-		i++;
-	}
 	return (0);
 }
 
