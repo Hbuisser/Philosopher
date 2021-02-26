@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 18:21:16 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:03:09 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,11 @@ int		eating(t_data *values)
 		if (values->nbr_of_time_each_philo_must_eat > 0 &&
 			(values->count_eat ==
 			values->nbr_of_time_each_philo_must_eat))
+		{
 			sem_post(values->sem_eat);
+			//exit(1);
+			kill(values->pid[values->philo - 1], SIGTERM);
+		}
 		my_sleep(values->time_to_eat);
 	}
 	return (1);

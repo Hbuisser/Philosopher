@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 18:13:30 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/26 10:44:43 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,12 @@ int		philo_in_action(t_data *values)
 		}
 		i++;
 	}
-	sem_wait(values->sem_eat);
+	i = 0;
+	while (i < values->nbr_of_philo)
+	{
+		sem_wait(values->sem_eat);
+		i++;
+	}
 	return (0);
 }
 
