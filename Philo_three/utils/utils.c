@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/25 18:21:40 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:14:04 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,4 @@ long	get_time(void)
 	milliseconds = tp.tv_sec * 1000;
 	milliseconds += tp.tv_usec / 1000;
 	return (milliseconds);
-}
-
-int		check_count_eat(void)
-{
-	int		i;
-	t_data	*values;
-
-	values = get_struct();
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
-		if (values->count_eat == values->nbr_of_time_each_philo_must_eat)
-			values->has_eat[i] = 1;
-		i++;
-	}
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
-		if (values->has_eat[i] == 0)
-			return (-1);
-		i++;
-	}
-	if (values->nbr_of_time_each_philo_must_eat > 0)
-		return (1);
-	return (0);
 }

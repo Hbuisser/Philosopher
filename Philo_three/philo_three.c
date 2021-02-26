@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/26 11:03:09 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:35:53 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,6 @@ void	*routine_time(void *arg)
 			print_str_dead(values->philo, (get_time() - values->t_start));
 			return (0);
 		}
-		// if (check_count_eat() > 0)
-		// {
-		// 	sem_wait(values->sem_global);
-		// 	values->status = 1;
-		// 	sem_post(values->sem_dead);
-		// }
 		usleep(3600);
 	}
 	return (arg);
@@ -76,12 +70,11 @@ int		eating(t_data *values)
 		values->last_eat = get_time();
 		print_str(time, values->philo, mess);
 		if (values->nbr_of_time_each_philo_must_eat > 0 &&
-			(values->count_eat ==
+			(values->count_eat >=
 			values->nbr_of_time_each_philo_must_eat))
 		{
 			sem_post(values->sem_eat);
-			//exit(1);
-			kill(values->pid[values->philo - 1], SIGTERM);
+			values->status = 1;
 		}
 		my_sleep(values->time_to_eat);
 	}
@@ -100,6 +93,8 @@ void	routine(t_data *values)
 		eating(values);
 		sem_post(values->sem_forks);
 		sem_post(values->sem_forks);
+		if (values->status == 1)
+			exit(0);
 		sleeping(values);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/26 10:44:43 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:15:17 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,6 @@ int		init_sem(t_data *values)
 		values->nbr_of_philo);
 	if (values->sem_eat == SEM_FAILED)
 		return (1);
-	// sem_unlink("sem_dead");
-	// values->sem_dead = sem_open("sem_dead", O_CREAT, 0660, 1);
-	// if (values->sem_dead == SEM_FAILED)
-	// 	return (1);
 	sem_unlink("sem_forks");
 	values->sem_forks = sem_open("sem_forks", O_CREAT, 0660,
 		values->nbr_of_philo);
@@ -41,12 +37,9 @@ int		philo_in_action(t_data *values)
 
 	if (init_sem(values))
 		return (0);
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
+	i = -1;
+	while (++i < values->nbr_of_philo)
 		sem_wait(values->sem_eat);
-		i++;
-	}
 	i = 0;
 	while (i < values->nbr_of_philo)
 	{
@@ -59,12 +52,9 @@ int		philo_in_action(t_data *values)
 		}
 		i++;
 	}
-	i = 0;
-	while (i < values->nbr_of_philo)
-	{
+	i = -1;
+	while (++i < values->nbr_of_philo)
 		sem_wait(values->sem_eat);
-		i++;
-	}
 	return (0);
 }
 
