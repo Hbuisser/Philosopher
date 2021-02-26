@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/26 11:15:17 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:40:59 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 
 int		init_sem(t_data *values)
 {
-	sem_unlink("sem_eat");
+	if (sem_unlink("sem_eat") < 0)
+		return (1);
 	values->sem_eat = sem_open("sem_eat", O_CREAT, 0660,
 		values->nbr_of_philo);
 	if (values->sem_eat == SEM_FAILED)
 		return (1);
-	sem_unlink("sem_forks");
+	if (sem_unlink("sem_forks") < 0)
+		return (1);
 	values->sem_forks = sem_open("sem_forks", O_CREAT, 0660,
 		values->nbr_of_philo);
 	if (values->sem_forks == SEM_FAILED)
 		return (1);
-	sem_unlink("sem_global");
+	if (sem_unlink("sem_global") < 0)
+		return (1);
 	values->sem_global = sem_open("sem_global", O_CREAT, 0660, 1);
 	if (values->sem_global == SEM_FAILED)
 		return (1);
@@ -36,7 +39,7 @@ int		philo_in_action(t_data *values)
 	int	i;
 
 	if (init_sem(values))
-		return (0);
+		return (1);
 	i = -1;
 	while (++i < values->nbr_of_philo)
 		sem_wait(values->sem_eat);
@@ -81,7 +84,8 @@ int		main(int argc, char **argv)
 	if (complete_values(values))
 		return (0);
 	values->t_start = get_time();
-	philo_in_action(values);
+	if (philo_in_action(values))
+		return (0);
 	free_all(values);
 	return (0);
 }
