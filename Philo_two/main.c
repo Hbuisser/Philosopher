@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 19:44:00 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/03/02 15:02:28 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,17 @@ int		philo_in_action(t_data *values)
 		pthread_create(&values->thread[i], NULL, &routine, &values->iter[i]);
 	pthread_create(&values->thread_time, NULL, &routine_time, NULL);
 	sem_wait(values->sem_dead);
+	// i = 0;
+	// while (i < values->nbr_of_philo)
+    // {
+    //     sem_post(values->sem_forks);
+    //     // sem_post(values->sem_global);
+    //     // sem_post(values->sem_dead);
+    //     i++;
+    // }
+    // sem_close(values->sem_forks);
+    // sem_close(values->sem_global);
+    // sem_close(values->sem_dead);
 	return (0);
 }
 

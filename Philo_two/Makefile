@@ -6,7 +6,7 @@
 #    By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/25 20:05:16 by hbuisser          #+#    #+#              #
-#    Updated: 2021/02/23 17:43:12 by hbuisser         ###   ########.fr        #
+#    Updated: 2021/03/02 14:47:59 by hbuisser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS = main.c \
 		
 OBJS = $(SRCS:%.c=%.o)
 
-NAME = Philo_two
+NAME = philo_two
 
 CFLAGS = -g -Wall -Wextra -Werror -pthread 
 

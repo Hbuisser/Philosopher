@@ -6,7 +6,7 @@
 /*   By: hbuisser <hbuisser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 17:33:37 by hbuisser          #+#    #+#             */
-/*   Updated: 2021/02/23 19:12:20 by hbuisser         ###   ########.fr       */
+/*   Updated: 2021/03/02 14:51:20 by hbuisser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	*routine(void *arg)
 		fork = (i + 1) % values->nbr_of_philo;
 	}
 	values->last_eat[i] = get_time();
+	pthread_detach(*values->thread);
 	while (values->status == -1)
 	{
 		thinking(values, i);
