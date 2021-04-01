@@ -20,7 +20,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef struct		s_data
+typedef struct s_data
 {
 	int				nbr_of_philo;
 	int				time_to_die;
@@ -29,9 +29,9 @@ typedef struct		s_data
 	int				nbr_of_time_each_philo_must_eat;
 	pthread_t		*thread;
 	pthread_t		thread_time;
-	pthread_mutex_t *mutex;
-	pthread_mutex_t global_mutex;
-	pthread_mutex_t dead_mutex;
+	pthread_mutex_t	*mutex;
+	pthread_mutex_t	global_mutex;
+	pthread_mutex_t	dead_mutex;
 	int				*count_eat;
 	int				*has_eat;
 	int				*iter;
@@ -54,8 +54,6 @@ t_data				*get_struct(void);
 */
 
 int					print_array(t_data *values);
-int					ft_atoi(const char *str);
-int					only_digit(char *str);
 int					init_struct(t_data *values);
 int					parse_values(t_data *values, int argc, char **argv);
 int					complete_values(t_data *values);
@@ -69,18 +67,20 @@ void				my_sleep(long int time);
 *** Errors and Free
 */
 
+int					only_digit(char *str);
 int					error_arg(int argc, char **argv);
 int					ft_free_str(char **str, int result);
 int					free_all(t_data *values);
 int					ft_free_int(int i, int result);
 int					check_time(t_data *values);
+//static char			*ft_zero(void);
 
 /*
 *** Libft
 */
 
 char				*ft_itoa(int n);
-int					ft_atoi(const char *str);
+long long			ft_atoi(const char *str);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strdup(const char *s1);
 size_t				ft_strlen(const char *s);

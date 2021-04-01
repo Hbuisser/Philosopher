@@ -73,7 +73,7 @@ void	print_str_dead(int i, long int diff)
 	pthread_mutex_unlock(&values->dead_mutex);
 }
 
-int		init_struct(t_data *values)
+int	init_struct(t_data *values)
 {
 	values->nbr_of_philo = 0;
 	values->time_to_die = 0;
@@ -87,7 +87,7 @@ int		init_struct(t_data *values)
 
 t_data	*get_struct(void)
 {
-	static t_data values;
+	static t_data	values;
 
 	return (&values);
 }

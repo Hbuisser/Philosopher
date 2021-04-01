@@ -14,7 +14,7 @@
 
 int	error_arg(int argc, char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (argc < 5)
@@ -41,7 +41,7 @@ int	error_arg(int argc, char **argv)
 
 int	free_all(t_data *values)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	free(values->count_eat);
@@ -49,4 +49,18 @@ int	free_all(t_data *values)
 	free(values->iter);
 	free(values->last_eat);
 	return (0);
+}
+
+int	only_digit(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] > '9' || str[i] < '0')
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -41,7 +41,7 @@ void	*routine_time(void *arg)
 	return (arg);
 }
 
-int		thinking(t_data *values, int i)
+int	thinking(t_data *values, int i)
 {
 	long int	time;
 	char		*mess;
@@ -53,7 +53,7 @@ int		thinking(t_data *values, int i)
 	return (0);
 }
 
-int		sleeping(t_data *values, int i)
+int	sleeping(t_data *values, int i)
 {
 	long int	time;
 	char		*mess;
@@ -68,20 +68,25 @@ int		sleeping(t_data *values, int i)
 	return (0);
 }
 
-int		eating(t_data *values, int i)
+int	eating(t_data *values, int i, int fork, int next_fork)
 {
 	long int	time;
 	char		*mess;
 
-	values->count_eat[i] += 1;
+	pthread_mutex_lock(&values->mutex[fork]);
+	print_str_fork(i + 1);
+	pthread_mutex_lock(&values->mutex[next_fork]);
 	mess = ft_strdup(" is eating\n");
 	time = get_time() - values->t_start;
 	if (values->status == -1)
 	{
+		values->count_eat[i] += 1;
 		print_str(time, i + 1, mess);
 		values->last_eat[i] = get_time();
 		my_sleep(values->time_to_eat);
 	}
+	pthread_mutex_unlock(&values->mutex[fork]);
+	pthread_mutex_unlock(&values->mutex[next_fork]);
 	return (0);
 }
 
@@ -95,23 +100,18 @@ void	*routine(void *arg)
 	values = get_struct();
 	i = *(int *)arg;
 	fork = i;
-	next_fork = (i + 1) % values->nbr_of_philo;
+	next_fork = (fork + 1) % values->nbr_of_philo;
 	if (i % 2 == 0)
 	{
 		next_fork = i;
-		fork = (i + 1) % values->nbr_of_philo;
+		fork = (next_fork + 1) % values->nbr_of_philo;
 	}
 	values->last_eat[i] = get_time();
 	pthread_detach(*values->thread);
 	while (values->status == -1)
 	{
 		thinking(values, i);
-		pthread_mutex_lock(&values->mutex[fork]);
-		print_str_fork(i + 1);
-		pthread_mutex_lock(&values->mutex[next_fork]);
-		eating(values, i);
-		pthread_mutex_unlock(&values->mutex[fork]);
-		pthread_mutex_unlock(&values->mutex[next_fork]);
+		eating(values, i, fork, next_fork);
 		sleeping(values, i);
 	}
 	return (0);

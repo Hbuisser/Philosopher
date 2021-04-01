@@ -14,20 +14,20 @@
 
 int		init_sem(t_data *values)
 {
-	if (sem_unlink("sem_eat") < 0)
-		return (1);
+	// if (sem_unlink("sem_eat") < 0)
+	// 	return (1);
 	values->sem_eat = sem_open("sem_eat", O_CREAT, 0660,
 		values->nbr_of_philo);
 	if (values->sem_eat == SEM_FAILED)
 		return (1);
-	if (sem_unlink("sem_forks") < 0)
-		return (1);
+	// if (sem_unlink("sem_forks") < 0)
+	// 	return (1);
 	values->sem_forks = sem_open("sem_forks", O_CREAT, 0660,
 		values->nbr_of_philo);
 	if (values->sem_forks == SEM_FAILED)
 		return (1);
-	if (sem_unlink("sem_global") < 0)
-		return (1);
+	// if (sem_unlink("sem_global") < 0)
+	// 	return (1);
 	values->sem_global = sem_open("sem_global", O_CREAT, 0660, 1);
 	if (values->sem_global == SEM_FAILED)
 		return (1);

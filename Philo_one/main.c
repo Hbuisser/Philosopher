@@ -12,7 +12,7 @@
 
 #include "include/philo.h"
 
-int		check_count_eat(void)
+int	check_count_eat(void)
 {
 	int		i;
 	t_data	*values;
@@ -37,7 +37,7 @@ int		check_count_eat(void)
 	return (0);
 }
 
-int		destroy_mutex(t_data *values)
+int	destroy_mutex(t_data *values)
 {
 	int		i;
 
@@ -52,9 +52,9 @@ int		destroy_mutex(t_data *values)
 	return (0);
 }
 
-int		init_and_malloc_mutex_and_thread(t_data *values)
+int	init_and_malloc_mutex_and_thread(t_data *values)
 {
-	int		i;
+	int	i;
 
 	values->mutex = malloc(sizeof(pthread_mutex_t) * values->nbr_of_philo);
 	memset(values->mutex, 0, values->nbr_of_philo * 8);
@@ -69,7 +69,7 @@ int		init_and_malloc_mutex_and_thread(t_data *values)
 	return (0);
 }
 
-int		philo_in_action(t_data *values)
+int	philo_in_action(t_data *values)
 {
 	int	i;
 	int	*status;
@@ -85,7 +85,7 @@ int		philo_in_action(t_data *values)
 	return (0);
 }
 
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_data	*values;
 	int		i;
