@@ -41,7 +41,7 @@ void	*routine_time(void *arg)
 	return (arg);
 }
 
-int		thinking(t_data *values, int i)
+int	thinking(t_data *values, int i)
 {
 	long int	time;
 	char		*mess;
@@ -55,7 +55,7 @@ int		thinking(t_data *values, int i)
 	return (0);
 }
 
-int		sleeping(t_data *values, int i)
+int	sleeping(t_data *values, int i)
 {
 	long int	time;
 	char		*mess;
@@ -70,7 +70,7 @@ int		sleeping(t_data *values, int i)
 	return (0);
 }
 
-int		eating(t_data *values, int i)
+int	eating(t_data *values, int i)
 {
 	long int	time;
 	char		*mess;

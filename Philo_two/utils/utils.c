@@ -39,7 +39,7 @@ long	get_time(void)
 	return (milliseconds);
 }
 
-int		only_digit(char *str)
+int	only_digit(char *str)
 {
 	int	i;
 
@@ -53,7 +53,7 @@ int		only_digit(char *str)
 	return (1);
 }
 
-int		check_count_eat(void)
+int	check_count_eat(void)
 {
 	int		i;
 	t_data	*values;

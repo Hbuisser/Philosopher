@@ -21,7 +21,7 @@
 # include <sys/time.h>
 # include <semaphore.h>
 
-typedef struct	s_data
+typedef struct s_data
 {
 	int			nbr_of_philo;
 	int			time_to_die;
@@ -84,7 +84,7 @@ int				free_all(t_data *values);
 *** Libft
 */
 
-int				ft_atoi(const char *str);
+long long		ft_atoi(const char *str);
 char			*ft_itoa(int n);
 char			*ft_strdup(const char *s1);
 size_t			ft_strlen(const char *s);

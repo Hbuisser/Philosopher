@@ -12,7 +12,7 @@
 
 #include "include/philo.h"
 
-int		init_thread_and_sem(t_data *values)
+int	init_thread_and_sem(t_data *values)
 {
 	values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
 	memset(values->thread, 0, values->nbr_of_philo * 8);
@@ -23,7 +23,7 @@ int		init_thread_and_sem(t_data *values)
 	if (values->sem_dead == SEM_FAILED)
 		return (1);
 	values->sem_forks = sem_open("sem_forks", O_CREAT, 0660,
-		values->nbr_of_philo);
+			values->nbr_of_philo);
 	if (values->sem_forks == SEM_FAILED)
 		return (1);
 	values->sem_global = sem_open("sem_global", O_CREAT, 0660, 1);
@@ -33,7 +33,7 @@ int		init_thread_and_sem(t_data *values)
 	return (0);
 }
 
-int		philo_in_action(t_data *values)
+int	philo_in_action(t_data *values)
 {
 	int	i;
 	int	*status;
@@ -46,28 +46,17 @@ int		philo_in_action(t_data *values)
 		pthread_create(&values->thread[i], NULL, &routine, &values->iter[i]);
 	pthread_create(&values->thread_time, NULL, &routine_time, NULL);
 	sem_wait(values->sem_dead);
-	// i = 0;
-	// while (i < values->nbr_of_philo)
-    // {
-    //     sem_post(values->sem_forks);
-    //     // sem_post(values->sem_global);
-    //     // sem_post(values->sem_dead);
-    //     i++;
-    // }
-    // sem_close(values->sem_forks);
-    // sem_close(values->sem_global);
-    // sem_close(values->sem_dead);
 	return (0);
 }
 
 t_data	*get_struct(void)
 {
-	static t_data values;
+	static t_data	values;
 
 	return (&values);
 }
 
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_data	*values;
 	int		i;
