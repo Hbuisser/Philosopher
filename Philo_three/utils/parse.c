@@ -12,25 +12,26 @@
 
 #include "../include/philo.h"
 
-int		complete_values(t_data *values)
+int	complete_values(t_data *values)
 {
 	int	i;
 
 	i = -1;
-	if (!(values->has_eat = (int *)malloc(sizeof(int) * values->nbr_of_philo)))
+	values->has_eat = (int *)malloc(sizeof(int) * values->nbr_of_philo);
+	if (!values->has_eat)
 		return (1);
 	while (++i < values->nbr_of_philo)
 		values->has_eat[i] = 0;
 	i = -1;
-	if (!(values->pid = (int *)malloc(sizeof(long int) *
-		values->nbr_of_philo)))
+	values->pid = (int *)malloc(sizeof(long int) * values->nbr_of_philo);
+	if (!values->pid)
 		return (1);
 	while (++i < values->nbr_of_philo)
 		values->pid[i] = 0;
 	return (0);
 }
 
-int		parse_values(t_data *values, int argc, char **argv)
+int	parse_values(t_data *values, int argc, char **argv)
 {
 	values->nbr_of_philo = ft_atoi(argv[1]);
 	values->time_to_die = ft_atoi(argv[2]);

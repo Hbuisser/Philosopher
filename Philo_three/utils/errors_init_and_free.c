@@ -12,9 +12,9 @@
 
 #include "../include/philo.h"
 
-int		error_arg(int argc, char **argv)
+int	error_arg(int argc, char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (argc < 5)
@@ -39,7 +39,7 @@ int		error_arg(int argc, char **argv)
 	return (0);
 }
 
-int		init_struct(t_data *values)
+int	init_struct(t_data *values)
 {
 	values->nbr_of_philo = 0;
 	values->time_to_die = 0;
@@ -54,7 +54,7 @@ int		init_struct(t_data *values)
 	return (0);
 }
 
-int		free_all(t_data *values)
+int	free_all(t_data *values)
 {
 	free(values->has_eat);
 	return (0);

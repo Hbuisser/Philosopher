@@ -14,7 +14,7 @@
 
 void	*routine_time(void *arg)
 {
-	t_data		*values;
+	t_data	*values;
 
 	values = get_struct();
 	while (values->status == -1)
@@ -30,7 +30,7 @@ void	*routine_time(void *arg)
 	return (arg);
 }
 
-int		thinking(t_data *values)
+int	thinking(t_data *values)
 {
 	long int	time;
 	char		*mess;
@@ -42,7 +42,7 @@ int		thinking(t_data *values)
 	return (0);
 }
 
-int		sleeping(t_data *values)
+int	sleeping(t_data *values)
 {
 	long int	time;
 	char		*mess;
@@ -57,7 +57,7 @@ int		sleeping(t_data *values)
 	return (0);
 }
 
-int		eating(t_data *values)
+int	eating(t_data *values)
 {
 	long int	time;
 	char		*mess;
@@ -69,9 +69,8 @@ int		eating(t_data *values)
 	{
 		values->last_eat = get_time();
 		print_str(time, values->philo, mess);
-		if (values->nbr_of_time_each_philo_must_eat > 0 &&
-			(values->count_eat >=
-			values->nbr_of_time_each_philo_must_eat))
+		if (values->nbr_of_time_each_philo_must_eat > 0
+			&& (values->count_eat >= values->nbr_of_time_each_philo_must_eat))
 		{
 			sem_post(values->sem_eat);
 			values->status = 1;

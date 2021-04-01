@@ -12,7 +12,7 @@
 
 #include "../include/philo.h"
 
-int		only_digit(char *str)
+int	only_digit(char *str)
 {
 	int	i;
 
