@@ -79,7 +79,7 @@ int	main(int argc, char **argv)
 		return (0);
 	if (complete_values(values))
 		return (0);
-	values->t_start = get_time();
+	values->t_start = get_time(values);
 	if (philo_in_action(values))
 		return (0);
 	free_all(values);

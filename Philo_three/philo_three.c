@@ -19,10 +19,10 @@ void	*routine_time(void *arg)
 	values = get_struct();
 	while (values->status == -1)
 	{
-		if ((get_time() - values->last_eat) > values->time_to_die)
+		if ((get_time(values) - values->last_eat) > values->time_to_die)
 		{
 			values->status = 1;
-			print_str_dead(values->philo, (get_time() - values->t_start));
+			print_str_dead(values->philo, (get_time(values)));
 			return (0);
 		}
 		usleep(3600);
@@ -36,7 +36,7 @@ int	thinking(t_data *values)
 	char		*mess;
 
 	mess = ft_strdup(" is thinking\n");
-	time = get_time() - values->t_start;
+	time = get_time(values);
 	if (values->status == -1)
 		print_str(time, values->philo, mess);
 	return (0);
@@ -47,12 +47,12 @@ int	sleeping(t_data *values)
 	long int	time;
 	char		*mess;
 
-	time = get_time() - values->t_start;
+	time = get_time(values);
 	mess = ft_strdup(" is sleeping\n");
 	if (values->status == -1)
 	{
 		print_str(time, values->philo, mess);
-		my_sleep(values->time_to_sleep);
+		my_sleep(values->time_to_sleep, values);
 	}
 	return (0);
 }
@@ -64,10 +64,10 @@ int	eating(t_data *values)
 
 	values->count_eat += 1;
 	mess = ft_strdup(" is eating\n");
-	time = get_time() - values->t_start;
+	time = get_time(values);
 	if (values->status == -1)
 	{
-		values->last_eat = get_time();
+		values->last_eat = get_time(values);
 		print_str(time, values->philo, mess);
 		if (values->nbr_of_time_each_philo_must_eat > 0
 			&& (values->count_eat >= values->nbr_of_time_each_philo_must_eat))
@@ -75,14 +75,14 @@ int	eating(t_data *values)
 			sem_post(values->sem_eat);
 			values->status = 1;
 		}
-		my_sleep(values->time_to_eat);
+		my_sleep(values->time_to_eat, values);
 	}
 	return (1);
 }
 
 void	routine(t_data *values)
 {
-	values->last_eat = get_time();
+	values->last_eat = get_time(values);
 	while (values->status == -1)
 	{
 		thinking(values);

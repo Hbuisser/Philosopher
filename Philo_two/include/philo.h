@@ -68,9 +68,9 @@ int				check_time(t_data *values);
 *** Print
 */
 
-void			print_str_dead(int i, long int diff);
-void			print_str_fork(int i);
-void			print_str(long int t, int phi, char *mess);
+int				print_str_dead(int i, long int diff);
+int				print_str_fork(int i);
+int				print_str(long int t, int phi, char *mess);
 
 /*
 *** Errors, init and free

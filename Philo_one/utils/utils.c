@@ -12,23 +12,23 @@
 
 #include "../include/philo.h"
 
-void	my_sleep(long int time)
+void	my_sleep(long int time, t_data *values)
 {
 	long int	i;
 	long int	t;
 
 	i = 0;
-	t = get_time();
+	t = get_time(values);
 	while (i < (time * 20))
 	{
 		i++;
-		if ((get_time() - t) >= time)
+		if ((get_time(values) - t) >= time)
 			break ;
 		usleep(50);
 	}
 }
 
-long	get_time(void)
+long	get_time(t_data *values)
 {
 	struct timeval	tp;
 	long			milliseconds;
@@ -36,7 +36,7 @@ long	get_time(void)
 	gettimeofday(&tp, NULL);
 	milliseconds = tp.tv_sec * 1000;
 	milliseconds += tp.tv_usec / 1000;
-	return (milliseconds);
+	return (milliseconds - values->t_start);
 }
 
 int	complete_values2(t_data *values)
