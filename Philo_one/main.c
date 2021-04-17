@@ -57,8 +57,12 @@ int	init_and_malloc_mutex_and_thread(t_data *values)
 	int	i;
 
 	values->mutex = malloc(sizeof(pthread_mutex_t) * values->nbr_of_philo);
+	if (!values->mutex)
+		return (-1);
 	memset(values->mutex, 0, values->nbr_of_philo * 8);
 	values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
+	if (!values->thread)
+		return (-1);
 	memset(values->thread, 0, values->nbr_of_philo * 8);
 	pthread_mutex_init(&values->global_mutex, NULL);
 	pthread_mutex_init(&values->dead_mutex, NULL);
@@ -75,7 +79,8 @@ int	philo_in_action(t_data *values)
 	int	*status;
 
 	status = NULL;
-	init_and_malloc_mutex_and_thread(values);
+	if (init_and_malloc_mutex_and_thread(values) == -1)
+		return (0);
 	i = -1;
 	while (++i < values->nbr_of_philo)
 		pthread_create(&values->thread[i], NULL, &routine, &values->iter[i]);

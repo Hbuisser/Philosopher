@@ -15,6 +15,8 @@
 int	init_thread_and_sem(t_data *values)
 {
 	values->thread = malloc(sizeof(pthread_t) * values->nbr_of_philo);
+	if (!values->thread)
+		return (1);
 	memset(values->thread, 0, values->nbr_of_philo * 8);
 	sem_unlink("sem_forks");
 	sem_unlink("sem_global");
@@ -71,7 +73,7 @@ int	main(int argc, char **argv)
 		return (0);
 	if (complete_values(values))
 		return (0);
-	values->t_start = get_time();
+	values->t_start = get_time(values);
 	philo_in_action(values);
 	free_all(values);
 	return (0);

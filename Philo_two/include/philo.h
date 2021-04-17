@@ -60,8 +60,8 @@ int				check_count_eat(void);
 int				only_digit(char *str);
 int				parse_values(t_data *values, int argc, char **argv);
 int				complete_values(t_data *values);
-long			get_time(void);
-void			my_sleep(long int time);
+long			get_time(t_data *values);
+void			my_sleep(long int time, t_data *values);
 int				check_time(t_data *values);
 
 /*

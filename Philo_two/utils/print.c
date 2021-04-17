@@ -40,7 +40,7 @@ void	print_str_fork(int i)
 	t_data	*values;
 
 	values = get_struct();
-	time = ft_itoa((int)(get_time() - values->t_start));
+	time = ft_itoa((int)(get_time(values)));
 	mess = ft_strdup(" has taken a fork\n");
 	philo = ft_itoa(i);
 	str = ft_strjoin_free(time, " ");
