@@ -62,3 +62,12 @@ int	free_all(t_data *values)
 	free(values->last_eat);
 	return (0);
 }
+
+char	*check_if_malloc(char *s1, char *s2)
+{
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
+	return (NULL);
+}

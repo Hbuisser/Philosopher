@@ -82,7 +82,7 @@ char	*ft_strjoin_free_all(char *s1, char *s2)
 	char	*dest;
 
 	if (s2 == NULL || s1 == NULL)
-		return (NULL);
+		return (check_if_malloc(s1, s2));
 	dest = malloc((ft_strlen(s1) + ft_strlen(s2)) * sizeof(char *));
 	if (!dest)
 		return (NULL);

@@ -79,6 +79,7 @@ int				print_str(long int t, int phi, char *mess);
 int				error_arg(int argc, char **argv);
 int				init_struct(t_data *values);
 int				free_all(t_data *values);
+char			*check_if_malloc(char *s1, char *s2);
 
 /*
 *** Libft

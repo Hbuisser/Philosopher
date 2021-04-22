@@ -12,7 +12,7 @@
 
 #include "../include/philo.h"
 
-int		print_str(long int t, int phi, char *mess)
+int	print_str(long int t, int phi, char *mess)
 {
 	char	*time;
 	char	*philo;
@@ -21,11 +21,7 @@ int		print_str(long int t, int phi, char *mess)
 
 	values = get_struct();
 	time = ft_itoa((int)t);
-	if (!time)
-		return (0);
 	philo = ft_itoa(phi);
-	if (!philo)
-		return (0);
 	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
@@ -36,7 +32,7 @@ int		print_str(long int t, int phi, char *mess)
 	return (0);
 }
 
-int		print_str_fork(int i)
+int	print_str_fork(int i)
 {
 	char	*philo;
 	char	*time;
@@ -46,12 +42,8 @@ int		print_str_fork(int i)
 
 	values = get_struct();
 	time = ft_itoa((int)(get_time(values)));
-	if (!time)
-		return (0);
 	mess = ft_strdup(" has taken a fork\n");
 	philo = ft_itoa(i);
-	if (!philo)
-		return (0);
 	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
@@ -62,7 +54,7 @@ int		print_str_fork(int i)
 	return (0);
 }
 
-int		print_str_dead(int i, long int diff)
+int	print_str_dead(int i, long int diff)
 {
 	char	*philo;
 	char	*time;
@@ -73,11 +65,7 @@ int		print_str_dead(int i, long int diff)
 	values = get_struct();
 	mess = ft_strdup(" died\n");
 	philo = ft_itoa(i);
-	if (!philo)
-		return (0);
 	time = ft_itoa((int)diff);
-	if (!time)
-		return (0);
 	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);

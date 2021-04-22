@@ -73,7 +73,7 @@ int					ft_free_str(char **str, int result);
 int					free_all(t_data *values);
 int					ft_free_int(int i, int result);
 int					check_time(t_data *values);
-//static char			*ft_zero(void);
+char				*check_if_malloc(char *s1, char *s2);
 
 /*
 *** Libft
