@@ -101,6 +101,7 @@ void	*routine(void *arg)
 		sem_wait(values->sem_forks);
 		sem_wait(values->sem_forks);
 		print_str_fork(i + 1);
+		print_str_fork(i + 1);
 		eating(values, i);
 		sem_post(values->sem_forks);
 		sem_post(values->sem_forks);

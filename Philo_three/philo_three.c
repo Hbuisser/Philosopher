@@ -89,6 +89,7 @@ void	routine(t_data *values)
 		sem_wait(values->sem_forks);
 		sem_wait(values->sem_forks);
 		print_str_fork(values->philo);
+		print_str_fork(values->philo);
 		eating(values);
 		sem_post(values->sem_forks);
 		sem_post(values->sem_forks);

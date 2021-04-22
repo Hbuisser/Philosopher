@@ -76,6 +76,7 @@ int	eating(t_data *values, int i, int fork, int next_fork)
 	pthread_mutex_lock(&values->mutex[fork]);
 	print_str_fork(i + 1);
 	pthread_mutex_lock(&values->mutex[next_fork]);
+	print_str_fork(i + 1);
 	mess = ft_strdup(" is eating\n");
 	time = get_time(values);
 	if (values->status == -1)

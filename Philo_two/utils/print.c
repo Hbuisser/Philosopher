@@ -73,11 +73,7 @@ int	print_str_dead(int i, long int diff)
 	values = get_struct();
 	mess = ft_strdup(" died\n");
 	philo = ft_itoa(i);
-	if (!philo)
-		return (0);
 	time = ft_itoa((int)diff);
-	if (!time)
-		return (0);
 	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);
