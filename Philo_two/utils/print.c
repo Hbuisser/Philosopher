@@ -21,11 +21,7 @@ int	print_str(long int t, int phi, char *mess)
 
 	values = get_struct();
 	time = ft_itoa((int)t);
-	if (!time)
-		return (0);
 	philo = ft_itoa(phi);
-	if (!philo)
-		return (0);
 	str = ft_strjoin_free(time, " ");
 	str = ft_strjoin_free_all(str, philo);
 	str = ft_strjoin_free_all(str, mess);

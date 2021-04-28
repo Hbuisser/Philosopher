@@ -19,11 +19,14 @@ void	my_sleep(long int time, t_data *values)
 
 	i = 0;
 	t = get_time(values);
+	//usleep(time * 0.8 * 1000);
 	while (i < (time * 20))
+	//while (1)
 	{
 		i++;
 		if ((get_time(values) - t) >= time)
 			break ;
+		//usleep(500);
 		usleep(50);
 	}
 }

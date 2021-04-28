@@ -58,7 +58,7 @@ int					init_struct(t_data *values);
 int					parse_values(t_data *values, int argc, char **argv);
 int					complete_values(t_data *values);
 long				get_time(t_data *values);
-int					print_str_dead(int i, long int diff);
+int					print_str_dead(int i);
 int					print_str_fork(int i);
 int					print_str(long int t, int phi, char *mess);
 void				my_sleep(long int time, t_data *values);

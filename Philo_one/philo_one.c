@@ -26,7 +26,9 @@ void	*routine_time(void *arg)
 			if ((get_time(values) - values->last_eat[i]) > values->time_to_die)
 			{
 				values->status = 1;
-				print_str_dead(i + 1, (get_time(values)));
+				pthread_mutex_lock(&values->global_mutex);
+				print_str_dead(i + 1);
+				pthread_mutex_unlock(&values->dead_mutex);
 				return (0);
 			}
 		}
@@ -36,7 +38,7 @@ void	*routine_time(void *arg)
 			values->status = 1;
 			pthread_mutex_unlock(&values->dead_mutex);
 		}
-		usleep(3600);
+		usleep(2000);
 	}
 	return (arg);
 }
@@ -49,7 +51,11 @@ int	thinking(t_data *values, int i)
 	mess = ft_strdup(" is thinking\n");
 	time = get_time(values);
 	if (values->status == -1)
+	{
+		pthread_mutex_lock(&values->global_mutex);
 		print_str(time, i + 1, mess);
+		pthread_mutex_unlock(&values->global_mutex);
+	}
 	return (0);
 }
 
@@ -62,7 +68,9 @@ int	sleeping(t_data *values, int i)
 	mess = ft_strdup(" is sleeping\n");
 	if (values->status == -1)
 	{
+		pthread_mutex_lock(&values->global_mutex);
 		print_str(time, i + 1, mess);
+		pthread_mutex_unlock(&values->global_mutex);
 		my_sleep(values->time_to_sleep, values);
 	}
 	return (0);
@@ -74,15 +82,19 @@ int	eating(t_data *values, int i, int fork, int next_fork)
 	char		*mess;
 
 	pthread_mutex_lock(&values->mutex[fork]);
-	print_str_fork(i + 1);
 	pthread_mutex_lock(&values->mutex[next_fork]);
 	print_str_fork(i + 1);
+	print_str_fork(i + 1);
 	mess = ft_strdup(" is eating\n");
+	pthread_mutex_lock(&values->global_mutex);
 	time = get_time(values);
+	pthread_mutex_unlock(&values->global_mutex);
 	if (values->status == -1)
 	{
 		values->count_eat[i] += 1;
+		pthread_mutex_lock(&values->global_mutex);
 		print_str(time, i + 1, mess);
+		pthread_mutex_unlock(&values->global_mutex);
 		values->last_eat[i] = get_time(values);
 		my_sleep(values->time_to_eat, values);
 	}
@@ -106,6 +118,7 @@ void	*routine(void *arg)
 	{
 		next_fork = i;
 		fork = (next_fork + 1) % values->nbr_of_philo;
+		usleep(500);
 	}
 	values->last_eat[i] = get_time(values);
 	pthread_detach(*values->thread);
