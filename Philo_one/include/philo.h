@@ -60,8 +60,11 @@ int					complete_values(t_data *values);
 long				get_time(t_data *values);
 int					print_str_dead(int i);
 int					print_str_fork(int i);
-int					print_str(long int t, int phi, char *mess);
+int					print_str_eating(long int t, int phi);
+int					print_str_sleeping(long int t, int phi);
+int					print_str_thinking(long int t, int phi);
 void				my_sleep(long int time, t_data *values);
+void				ft_putnbr_fd(long long n, int fd);
 
 /*
 *** Errors and Free

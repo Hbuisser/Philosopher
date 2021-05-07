@@ -14,6 +14,7 @@ SRCS = main.c \
 		philo_one.c \
 		utils/utils.c \
 		utils/print.c \
+		utils/print2.c \
 		utils/errors_and_free.c \
 		utils/libft.c \
 		utils/libft2.c

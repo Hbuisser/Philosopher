@@ -28,7 +28,7 @@ static void	affiche(long long n, int fd)
 	}
 }
 
-void		ft_putnbr_fd(long long n, int fd)
+void	ft_putnbr_fd(long long n, int fd)
 {
 	if (n == -2147483648)
 		write(fd, "-2147483648", 11);
@@ -42,49 +42,6 @@ void		ft_putnbr_fd(long long n, int fd)
 		else
 			affiche(n, fd);
 	}
-}
-
-int	print_str(long int t, int phi, char *mess)
-{
-	t_data	*values;
-
-	t = 0;
-	values = get_struct();
-	//pthread_mutex_lock(&values->global_mutex);
-	ft_putnbr_fd((long long)get_time(values), 1);
-	write(1, " ", 1);
-	ft_putnbr_fd((long long)phi, 1);
-	write(1, mess, ft_strlen(mess));
-	//pthread_mutex_unlock(&values->global_mutex);
-	return (0);
-}
-
-int	print_str_fork(int i)
-{
-	t_data	*values;
-
-	values = get_struct();
-	pthread_mutex_lock(&values->global_mutex);
-	ft_putnbr_fd((long long)get_time(values), 1);
-	write(1, " ", 1);
-	ft_putnbr_fd((long long)i, 1);
-	write(1, " has taken a fork\n", 18);
-	pthread_mutex_unlock(&values->global_mutex);
-	return (0);
-}
-
-int	print_str_dead(int i)
-{
-	t_data	*values;
-
-	values = get_struct();
-	//pthread_mutex_lock(&values->global_mutex);
-	ft_putnbr_fd((long long)get_time(values), 1);
-	write(1, " ", 1);
-	ft_putnbr_fd((long long)i, 1);
-	write(1, " died\n", 6);
-	//pthread_mutex_unlock(&values->dead_mutex);
-	return (0);
 }
 
 int	init_struct(t_data *values)

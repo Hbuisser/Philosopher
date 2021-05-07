@@ -26,9 +26,7 @@ void	*routine_time(void *arg)
 			if ((get_time(values) - values->last_eat[i]) > values->time_to_die)
 			{
 				values->status = 1;
-				pthread_mutex_lock(&values->global_mutex);
 				print_str_dead(i + 1);
-				pthread_mutex_unlock(&values->dead_mutex);
 				return (0);
 			}
 		}
@@ -46,14 +44,12 @@ void	*routine_time(void *arg)
 int	thinking(t_data *values, int i)
 {
 	long int	time;
-	char		*mess;
 
-	mess = ft_strdup(" is thinking\n");
 	time = get_time(values);
 	if (values->status == -1)
 	{
 		pthread_mutex_lock(&values->global_mutex);
-		print_str(time, i + 1, mess);
+		print_str_thinking(time, i + 1);
 		pthread_mutex_unlock(&values->global_mutex);
 	}
 	return (0);
@@ -62,14 +58,12 @@ int	thinking(t_data *values, int i)
 int	sleeping(t_data *values, int i)
 {
 	long int	time;
-	char		*mess;
 
 	time = get_time(values);
-	mess = ft_strdup(" is sleeping\n");
 	if (values->status == -1)
 	{
 		pthread_mutex_lock(&values->global_mutex);
-		print_str(time, i + 1, mess);
+		print_str_sleeping(time, i + 1);
 		pthread_mutex_unlock(&values->global_mutex);
 		my_sleep(values->time_to_sleep, values);
 	}
@@ -79,21 +73,19 @@ int	sleeping(t_data *values, int i)
 int	eating(t_data *values, int i, int fork, int next_fork)
 {
 	long int	time;
-	char		*mess;
 
 	pthread_mutex_lock(&values->mutex[fork]);
 	pthread_mutex_lock(&values->mutex[next_fork]);
 	print_str_fork(i + 1);
 	print_str_fork(i + 1);
-	mess = ft_strdup(" is eating\n");
 	pthread_mutex_lock(&values->global_mutex);
-	time = get_time(values);
 	pthread_mutex_unlock(&values->global_mutex);
+	time = get_time(values);
 	if (values->status == -1)
 	{
 		values->count_eat[i] += 1;
 		pthread_mutex_lock(&values->global_mutex);
-		print_str(time, i + 1, mess);
+		print_str_eating(time, i + 1);
 		pthread_mutex_unlock(&values->global_mutex);
 		values->last_eat[i] = get_time(values);
 		my_sleep(values->time_to_eat, values);
